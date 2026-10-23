@@ -1,0 +1,1462 @@
+[
+  {
+    "numero": 1,
+    "codigo": "2011102",
+    "asignatura": "APLICACIÓN DE ARQUITECTURA EMPRESARIAL",
+    "planes": {
+      "2018": 1,
+      "2023": null,
+      "2015": null
+    }
+  },
+  {
+    "numero": 2,
+    "codigo": "2011103",
+    "asignatura": "INGENIERÍA DE CONTROL",
+    "planes": {
+      "2018": 1,
+      "2023": null,
+      "2015": null
+    }
+  },
+  {
+    "numero": 3,
+    "codigo": "2011104",
+    "asignatura": "INGENIERÍA WEB",
+    "planes": {
+      "2018": 1,
+      "2023": null,
+      "2015": null
+    }
+  },
+  {
+    "numero": 4,
+    "codigo": "2011107",
+    "asignatura": "SISTEMAS DE INFORMACIÓN GEOGRÁFICOS",
+    "planes": {
+      "2018": 1,
+      "2023": null,
+      "2015": null
+    }
+  },
+  {
+    "numero": 5,
+    "codigo": "2011108",
+    "asignatura": "INTELIGENCIA DE NEGOCIOS",
+    "planes": {
+      "2018": 1,
+      "2023": null,
+      "2015": null
+    }
+  },
+  {
+    "numero": 6,
+    "codigo": "2011109",
+    "asignatura": "ROBÓTICA",
+    "planes": {
+      "2018": 1,
+      "2023": null,
+      "2015": null
+    }
+  },
+  {
+    "numero": 7,
+    "codigo": "2011110",
+    "asignatura": "SISTEMAS INTELIGENTES",
+    "planes": {
+      "2018": 1,
+      "2023": null,
+      "2015": null
+    }
+  },
+  {
+    "numero": 8,
+    "codigo": "INE001",
+    "asignatura": "PROCESO CULTURAL ANDINO",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 9,
+    "codigo": "INE002",
+    "asignatura": "PROGRAMACIÓN Y COMPUTACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": 26,
+      "2015": null
+    }
+  },
+  {
+    "numero": 10,
+    "codigo": "INE003",
+    "asignatura": "DIBUJO TÉCNICO",
+    "planes": {
+      "2018": null,
+      "2023": 393,
+      "2015": null
+    }
+  },
+  {
+    "numero": 11,
+    "codigo": "INE004",
+    "asignatura": "INGLÉS PARA ESCRITURA ACADÉMICA",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 12,
+    "codigo": "INE005",
+    "asignatura": "MATLAB",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 13,
+    "codigo": "INE006",
+    "asignatura": "CÁLCULOS BÁSICOS EN QUÍMICA",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 14,
+    "codigo": "INE007",
+    "asignatura": "SEGURIDAD E HIGIENE EN LABORATORIO",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 15,
+    "codigo": "INE008",
+    "asignatura": "FUNDAMENTOS DE RIESGOS DE DESASTRES Y CAMBIO\nCLIMÁTICO",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 16,
+    "codigo": "INE009",
+    "asignatura": "GEOGRAFIA ECONÓMICA DEL PERÚ",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 17,
+    "codigo": "INE010",
+    "asignatura": "CIUDADANÍA Y DERECHOS FUNDAMENTALES",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 18,
+    "codigo": "INE011",
+    "asignatura": "TALLER DE ELECTRICIDAD Y ELECTRONICA",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 19,
+    "codigo": "INE012",
+    "asignatura": "ECONOMIA GENERAL",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 20,
+    "codigo": "INE013",
+    "asignatura": "EMPRENDIMIENTO E INNOVACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": 58,
+      "2015": null
+    }
+  },
+  {
+    "numero": 21,
+    "codigo": "INE014",
+    "asignatura": "TALLER DE MÚSICA",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 22,
+    "codigo": "INE015",
+    "asignatura": "TALLER DE DANZA",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 23,
+    "codigo": "INE016",
+    "asignatura": "APRECIACIÓN DE CINE",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 24,
+    "codigo": "INE017",
+    "asignatura": "QUECHUA",
+    "planes": {
+      "2018": null,
+      "2023": 409,
+      "2015": null
+    }
+  },
+  {
+    "numero": 25,
+    "codigo": "INO101",
+    "asignatura": "REDACCIÓN Y TÉCNICAS DE COMUNICACIÓN EFECTIVA I",
+    "planes": {
+      "2018": null,
+      "2023": 15,
+      "2015": null
+    }
+  },
+  {
+    "numero": 26,
+    "codigo": "INO101",
+    "asignatura": "REDACCIÓN Y TÉCNICAS DE COMUNICACIÓN EFECTIVA I",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 109
+    }
+  },
+  {
+    "numero": 27,
+    "codigo": "INO102",
+    "asignatura": "MÉTODOS DE ESTUDIO UNIVERSITARIO",
+    "planes": {
+      "2018": null,
+      "2023": 2,
+      "2015": null
+    }
+  },
+  {
+    "numero": 28,
+    "codigo": "INO102",
+    "asignatura": "MÉTODOS DE ESTUDIO UNIVERSITARIO",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 108
+    }
+  },
+  {
+    "numero": 29,
+    "codigo": "INO103",
+    "asignatura": "DESARROLLO PERSONAL Y LIDERAZGO",
+    "planes": {
+      "2018": null,
+      "2023": 14,
+      "2015": null
+    }
+  },
+  {
+    "numero": 30,
+    "codigo": "INO103",
+    "asignatura": "DESARROLLO PERSONAL Y LIDERAZGO",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 110
+    }
+  },
+  {
+    "numero": 31,
+    "codigo": "INO104",
+    "asignatura": "CÁLCULO I",
+    "planes": {
+      "2018": null,
+      "2023": 2,
+      "2015": null
+    }
+  },
+  {
+    "numero": 32,
+    "codigo": "INO104",
+    "asignatura": "CÁLCULO I",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 107
+    }
+  },
+  {
+    "numero": 33,
+    "codigo": "INO105",
+    "asignatura": "BIOLOGÍA PARA CIENCIAS E INGENIERÍA",
+    "planes": {
+      "2018": null,
+      "2023": 36,
+      "2015": null
+    }
+  },
+  {
+    "numero": 34,
+    "codigo": "INO105",
+    "asignatura": "BIOLOGÍA PARA CIENCIAS E INGENIERÍA",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 108
+    }
+  },
+  {
+    "numero": 35,
+    "codigo": "INO106",
+    "asignatura": "ÁLGEBRA Y GEOMETRÍA ANALÍTICA",
+    "planes": {
+      "2018": null,
+      "2023": 3,
+      "2015": null
+    }
+  },
+  {
+    "numero": 36,
+    "codigo": "INO106",
+    "asignatura": "ÁLGEBRA Y GEOMETRÍA ANALÍTICA",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 111
+    }
+  },
+  {
+    "numero": 37,
+    "codigo": "INO107",
+    "asignatura": "MEDIO AMBIENTE Y DESARROLLO SOSTENIBLE",
+    "planes": {
+      "2018": null,
+      "2023": 34,
+      "2015": null
+    }
+  },
+  {
+    "numero": 38,
+    "codigo": "INO107",
+    "asignatura": "MEDIO AMBIENTE Y DESARROLLO SOSTENIBLE",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 106
+    }
+  },
+  {
+    "numero": 39,
+    "codigo": "INO108",
+    "asignatura": "PROGRAMACIÓN Y COMPUTACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 115
+    }
+  },
+  {
+    "numero": 40,
+    "codigo": "INO201",
+    "asignatura": "REDACCIÓN Y TÉCNICAS DE COMUNICACIÓN EFECTIVA II",
+    "planes": {
+      "2018": null,
+      "2023": 27,
+      "2015": null
+    }
+  },
+  {
+    "numero": 41,
+    "codigo": "INO201",
+    "asignatura": "REDACCIÓN Y TÉCNICAS DE COMUNICACIÓN EFECTIVA II",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 15
+    }
+  },
+  {
+    "numero": 42,
+    "codigo": "INO202",
+    "asignatura": "INVESTIGACIÓN FORMATIVA",
+    "planes": {
+      "2018": null,
+      "2023": 37,
+      "2015": null
+    }
+  },
+  {
+    "numero": 43,
+    "codigo": "INO202",
+    "asignatura": "INVESTIGACIÓN FORMATIVA",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 142
+    }
+  },
+  {
+    "numero": 44,
+    "codigo": "INO203",
+    "asignatura": "REALIDAD NACIONAL Y MUNDIAL",
+    "planes": {
+      "2018": null,
+      "2023": 6,
+      "2015": null
+    }
+  },
+  {
+    "numero": 45,
+    "codigo": "INO203",
+    "asignatura": "REALIDAD NACIONAL Y MUNDIAL",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 122
+    }
+  },
+  {
+    "numero": 46,
+    "codigo": "INO204",
+    "asignatura": "CÁLCULO II",
+    "planes": {
+      "2018": null,
+      "2023": 5,
+      "2015": null
+    }
+  },
+  {
+    "numero": 47,
+    "codigo": "INO204",
+    "asignatura": "CÁLCULO II",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 13
+    }
+  },
+  {
+    "numero": 48,
+    "codigo": "INO205",
+    "asignatura": "FÍSICA I",
+    "planes": {
+      "2018": null,
+      "2023": 4,
+      "2015": null
+    }
+  },
+  {
+    "numero": 49,
+    "codigo": "INO205",
+    "asignatura": "FÍSICA I",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 118
+    }
+  },
+  {
+    "numero": 50,
+    "codigo": "INO206",
+    "asignatura": "QUÍMICA GENERAL",
+    "planes": {
+      "2018": null,
+      "2023": 38,
+      "2015": null
+    }
+  },
+  {
+    "numero": 51,
+    "codigo": "INO206",
+    "asignatura": "QUÍMICA GENERAL",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 139
+    }
+  },
+  {
+    "numero": 52,
+    "codigo": "INO207",
+    "asignatura": "INTRODUCCIÓN A LAS CIENCIAS E INGENIERÍA",
+    "planes": {
+      "2018": null,
+      "2023": 13,
+      "2015": null
+    }
+  },
+  {
+    "numero": 53,
+    "codigo": "INO207",
+    "asignatura": "INTRODUCCIÓN A LAS CIENCIAS E INGENIERÍA",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 120
+    }
+  },
+  {
+    "numero": 54,
+    "codigo": "INO208",
+    "asignatura": "EMPRENDIMIENTO E INNOVACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 134
+    }
+  },
+  {
+    "numero": 55,
+    "codigo": "20118031",
+    "asignatura": "PROGRAMACIÓN Y FUNDAMENTOS DE ALGORÍTMICA",
+    "planes": {
+      "2018": null,
+      "2023": 6,
+      "2015": null
+    }
+  },
+  {
+    "numero": 56,
+    "codigo": "20118032",
+    "asignatura": "TEORÍA GENERAL DE SISTEMAS",
+    "planes": {
+      "2018": null,
+      "2023": 3,
+      "2015": null
+    }
+  },
+  {
+    "numero": 57,
+    "codigo": "20118033",
+    "asignatura": "ORGANIZACIÓN Y ADMINISTRACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": 4,
+      "2015": null
+    }
+  },
+  {
+    "numero": 58,
+    "codigo": "20118034",
+    "asignatura": "INGENIERÍA ECONOMICA",
+    "planes": {
+      "2018": null,
+      "2023": 8,
+      "2015": null
+    }
+  },
+  {
+    "numero": 59,
+    "codigo": "20118035",
+    "asignatura": "ESTADISTICA",
+    "planes": {
+      "2018": null,
+      "2023": 8,
+      "2015": null
+    }
+  },
+  {
+    "numero": 60,
+    "codigo": "20118036",
+    "asignatura": "SERIES Y ECUACIONES DIFERENCIALES",
+    "planes": {
+      "2018": null,
+      "2023": 13,
+      "2015": null
+    }
+  },
+  {
+    "numero": 61,
+    "codigo": "20118037",
+    "asignatura": "MATEMÁTICAS DISCRETAS",
+    "planes": {
+      "2018": null,
+      "2023": 5,
+      "2015": null
+    }
+  },
+  {
+    "numero": 62,
+    "codigo": "201230301",
+    "asignatura": "INTRODUCCIÓN A LA COMPUTACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 235
+    }
+  },
+  {
+    "numero": 63,
+    "codigo": "201230302",
+    "asignatura": "SERIES Y ECUACIONES DIFERENCIALES",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 76
+    }
+  },
+  {
+    "numero": 64,
+    "codigo": "201230303",
+    "asignatura": "ELECTROMAGNETISMO Y ÓPTICA",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 122
+    }
+  },
+  {
+    "numero": 65,
+    "codigo": "201230304",
+    "asignatura": "PROGRAMACIÓN DE COMPUTADORAS I",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 228
+    }
+  },
+  {
+    "numero": 66,
+    "codigo": "201230305",
+    "asignatura": "FUNDAMENTOS DE SISTEMAS DE INFORMACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 222
+    }
+  },
+  {
+    "numero": 67,
+    "codigo": "201230306",
+    "asignatura": "MATEMÁTICAS DISCRETAS",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 119
+    }
+  },
+  {
+    "numero": 68,
+    "codigo": "20118041",
+    "asignatura": "ALGORÍTMICA Y PROGRAMACIÓN ORIENTADA A OBJETOS",
+    "planes": {
+      "2018": null,
+      "2023": 13,
+      "2015": null
+    }
+  },
+  {
+    "numero": 69,
+    "codigo": "20118042",
+    "asignatura": "MARKETING",
+    "planes": {
+      "2018": null,
+      "2023": 13,
+      "2015": null
+    }
+  },
+  {
+    "numero": 70,
+    "codigo": "20118043",
+    "asignatura": "CONTABILIDAD GENERAL",
+    "planes": {
+      "2018": null,
+      "2023": 10,
+      "2015": null
+    }
+  },
+  {
+    "numero": 71,
+    "codigo": "20118044",
+    "asignatura": "PROCESOS DE NEGOCIOS",
+    "planes": {
+      "2018": null,
+      "2023": 16,
+      "2015": null
+    }
+  },
+  {
+    "numero": 72,
+    "codigo": "20118045",
+    "asignatura": "METODOS NUMERICOS",
+    "planes": {
+      "2018": null,
+      "2023": 13,
+      "2015": null
+    }
+  },
+  {
+    "numero": 73,
+    "codigo": "20118046",
+    "asignatura": "PROBABILIDADES Y MUESTERO",
+    "planes": {
+      "2018": null,
+      "2023": 28,
+      "2015": null
+    }
+  },
+  {
+    "numero": 74,
+    "codigo": "20118047",
+    "asignatura": "FISICA ELECTRONICA Y SISTEMAS DIGITALES",
+    "planes": {
+      "2018": null,
+      "2023": 10,
+      "2015": null
+    }
+  },
+  {
+    "numero": 75,
+    "codigo": "201230401",
+    "asignatura": "ORGANIZACIÓN EMPRESARIAL",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 24
+    }
+  },
+  {
+    "numero": 76,
+    "codigo": "201230402",
+    "asignatura": "PROGRAMACIÓN DE COMPUTADORAS II",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 22
+    }
+  },
+  {
+    "numero": 77,
+    "codigo": "201230403",
+    "asignatura": "MÉTODOS NUMÉRICOS",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 69
+    }
+  },
+  {
+    "numero": 78,
+    "codigo": "201230404",
+    "asignatura": "ARQUITECTURA DE COMPUTADORAS",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 16
+    }
+  },
+  {
+    "numero": 79,
+    "codigo": "201230405",
+    "asignatura": "ESTADÍSTICA I",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 130
+    }
+  },
+  {
+    "numero": 80,
+    "codigo": "201230406",
+    "asignatura": "INGENIERÍA ECONÓMICA",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 230
+    }
+  },
+  {
+    "numero": 81,
+    "codigo": "20118051",
+    "asignatura": "BASE DE DATOS",
+    "planes": {
+      "2018": null,
+      "2023": 26,
+      "2015": null
+    }
+  },
+  {
+    "numero": 82,
+    "codigo": "20118052",
+    "asignatura": "DISEÑO Y ANALISIS DE ALGORITMOS",
+    "planes": {
+      "2018": null,
+      "2023": 18,
+      "2015": null
+    }
+  },
+  {
+    "numero": 83,
+    "codigo": "20118053",
+    "asignatura": "ESTRUCTURA DE DATOS",
+    "planes": {
+      "2018": null,
+      "2023": 33,
+      "2015": null
+    }
+  },
+  {
+    "numero": 84,
+    "codigo": "20118054",
+    "asignatura": "ANALISIS DE SISTEMAS DE INFORMACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": 15,
+      "2015": null
+    }
+  },
+  {
+    "numero": 85,
+    "codigo": "20118055",
+    "asignatura": "MODELOS Y SIMULACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": 43,
+      "2015": null
+    }
+  },
+  {
+    "numero": 86,
+    "codigo": "20118056",
+    "asignatura": "ARQUITECTURA DE COMPUTADORAS",
+    "planes": {
+      "2018": null,
+      "2023": 20,
+      "2015": null
+    }
+  },
+  {
+    "numero": 87,
+    "codigo": "20118057",
+    "asignatura": "LENGUAJES Y COMPILADORES",
+    "planes": {
+      "2018": null,
+      "2023": 40,
+      "2015": null
+    }
+  },
+  {
+    "numero": 88,
+    "codigo": "201230501",
+    "asignatura": "ANÁLISIS DE SISTEMAS DE INFORMACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 119
+    }
+  },
+  {
+    "numero": 89,
+    "codigo": "201230502",
+    "asignatura": "DISEÑO DE BASE DE DATOS",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 107
+    }
+  },
+  {
+    "numero": 90,
+    "codigo": "201230503",
+    "asignatura": "ESTRUCTURA DE DATOS",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 115
+    }
+  },
+  {
+    "numero": 91,
+    "codigo": "201230504",
+    "asignatura": "ESTADÍSTICA II",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 119
+    }
+  },
+  {
+    "numero": 92,
+    "codigo": "201230505",
+    "asignatura": "SISTEMAS OPERATIVOS",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 122
+    }
+  },
+  {
+    "numero": 93,
+    "codigo": "201230506",
+    "asignatura": "INVESTIGACIÓN OPERATIVA",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 75
+    }
+  },
+  {
+    "numero": 94,
+    "codigo": "20118061",
+    "asignatura": "BIG DATA",
+    "planes": {
+      "2018": null,
+      "2023": 29,
+      "2015": null
+    }
+  },
+  {
+    "numero": 95,
+    "codigo": "20118062",
+    "asignatura": "COMPUTACIÓN VISUAL",
+    "planes": {
+      "2018": null,
+      "2023": 22,
+      "2015": null
+    }
+  },
+  {
+    "numero": 96,
+    "codigo": "20118063",
+    "asignatura": "FINANZAS PARA LA GESTIÓN",
+    "planes": {
+      "2018": null,
+      "2023": 31,
+      "2015": null
+    }
+  },
+  {
+    "numero": 97,
+    "codigo": "20118064",
+    "asignatura": "DISEÑO DE SISTEMAS DE INFORMACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": 32,
+      "2015": null
+    }
+  },
+  {
+    "numero": 98,
+    "codigo": "20118065",
+    "asignatura": "INVESTIGACIÓN OPERATIVA",
+    "planes": {
+      "2018": null,
+      "2023": 17,
+      "2015": null
+    }
+  },
+  {
+    "numero": 99,
+    "codigo": "20118066",
+    "asignatura": "REDES, TRANSMISIÓN Y AUTOMATIZACIÓN Y CONTROL",
+    "planes": {
+      "2018": null,
+      "2023": 27,
+      "2015": null
+    }
+  },
+  {
+    "numero": 100,
+    "codigo": "20118067",
+    "asignatura": "SISTEMAS OPERATIVOS",
+    "planes": {
+      "2018": null,
+      "2023": 24,
+      "2015": null
+    }
+  },
+  {
+    "numero": 101,
+    "codigo": "201230601",
+    "asignatura": "DISEÑO DE SISTEMAS DE INFORMACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 19
+    }
+  },
+  {
+    "numero": 102,
+    "codigo": "201230602",
+    "asignatura": "ADMINISTRACIÓN DE BASE DE DATOS",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 24
+    }
+  },
+  {
+    "numero": 103,
+    "codigo": "201230603",
+    "asignatura": "REDES Y COMUNICACIONES",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 13
+    }
+  },
+  {
+    "numero": 104,
+    "codigo": "201230604",
+    "asignatura": "DISEÑO DE INTERFASES DE USUARIO",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 24
+    }
+  },
+  {
+    "numero": 105,
+    "codigo": "201230605",
+    "asignatura": "MODELOS Y SIMULACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 55
+    }
+  },
+  {
+    "numero": 106,
+    "codigo": "201230606",
+    "asignatura": "FINANZAS PARA LA GESTIÓN",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 120
+    }
+  },
+  {
+    "numero": 107,
+    "codigo": "20118071",
+    "asignatura": "INTERACCIÓN HOMBRE COMPUTADOR",
+    "planes": {
+      "2018": null,
+      "2023": 29,
+      "2015": null
+    }
+  },
+  {
+    "numero": 108,
+    "codigo": "20118072",
+    "asignatura": "INTELIGENCIA DE NEGOCIOS",
+    "planes": {
+      "2018": null,
+      "2023": 50,
+      "2015": null
+    }
+  },
+  {
+    "numero": 109,
+    "codigo": "20118073",
+    "asignatura": "DESARROLLO DE SISTEMAS WEB",
+    "planes": {
+      "2018": null,
+      "2023": 37,
+      "2015": null
+    }
+  },
+  {
+    "numero": 110,
+    "codigo": "20118074",
+    "asignatura": "FORMULACIÓN Y EVALUACIÓN DE PROYECTOS",
+    "planes": {
+      "2018": null,
+      "2023": 24,
+      "2015": null
+    }
+  },
+  {
+    "numero": 111,
+    "codigo": "20118075",
+    "asignatura": "INTELIGENCIA ARTIFICIAL",
+    "planes": {
+      "2018": null,
+      "2023": 37,
+      "2015": null
+    }
+  },
+  {
+    "numero": 112,
+    "codigo": "20118076",
+    "asignatura": "INTERNET DE LAS COSAS",
+    "planes": {
+      "2018": null,
+      "2023": 28,
+      "2015": null
+    }
+  },
+  {
+    "numero": 113,
+    "codigo": "20118077",
+    "asignatura": "PROGRAMACIÓN PARALELA",
+    "planes": {
+      "2018": null,
+      "2023": 50,
+      "2015": null
+    }
+  },
+  {
+    "numero": 114,
+    "codigo": "201230701",
+    "asignatura": "INTERACCIÓN HUMANO COMPUTADOR",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 85
+    }
+  },
+  {
+    "numero": 115,
+    "codigo": "201230702",
+    "asignatura": "DESARROLLO DE APLICACIONES WEB",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 126
+    }
+  },
+  {
+    "numero": 116,
+    "codigo": "201230703",
+    "asignatura": "INTELIGENCIA ARTIFICIAL",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 114
+    }
+  },
+  {
+    "numero": 117,
+    "codigo": "201230704",
+    "asignatura": "INTELIGENCIA DE NEGOCIOS",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 155
+    }
+  },
+  {
+    "numero": 118,
+    "codigo": "201230705",
+    "asignatura": "GESTIÓN DE DATOS MASIVOS",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 127
+    }
+  },
+  {
+    "numero": 119,
+    "codigo": "201230706",
+    "asignatura": "INTERNET DE LAS COSAS",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 93
+    }
+  },
+  {
+    "numero": 120,
+    "codigo": "20118081",
+    "asignatura": "METODOLOGIA DE LA ELABORACIÓN DE TESIS",
+    "planes": {
+      "2018": null,
+      "2023": 52,
+      "2015": null
+    }
+  },
+  {
+    "numero": 121,
+    "codigo": "20118082",
+    "asignatura": "SISTEMAS DISTRIBUIDOS",
+    "planes": {
+      "2018": null,
+      "2023": 34,
+      "2015": null
+    }
+  },
+  {
+    "numero": 122,
+    "codigo": "20118083",
+    "asignatura": "DESARROLLO DE SISTEMAS MÓVILES",
+    "planes": {
+      "2018": null,
+      "2023": 91,
+      "2015": null
+    }
+  },
+  {
+    "numero": 123,
+    "codigo": "20118084",
+    "asignatura": "INGENIERIA DE LA INFORMACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": 45,
+      "2015": null
+    }
+  },
+  {
+    "numero": 124,
+    "codigo": "20118085",
+    "asignatura": "GESTIÓN DE PROYECTOS DE TECNOLOGÍAS DE LA\nINFORMACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": 41,
+      "2015": null
+    }
+  },
+  {
+    "numero": 125,
+    "codigo": "20118086",
+    "asignatura": "SISTEMAS INTELIGENTES",
+    "planes": {
+      "2018": null,
+      "2023": 69,
+      "2015": null
+    }
+  },
+  {
+    "numero": 126,
+    "codigo": "20118087",
+    "asignatura": "AUDITORIA Y SEGURIDAD DE TECNOLOGIAS DE\nINFORMACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": 64,
+      "2015": null
+    }
+  },
+  {
+    "numero": 127,
+    "codigo": "201230801",
+    "asignatura": "COMPUTACIÓN VISUAL",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 36
+    }
+  },
+  {
+    "numero": 128,
+    "codigo": "201230803",
+    "asignatura": "SISTEMAS DISTRIBUIDOS",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 118
+    }
+  },
+  {
+    "numero": 129,
+    "codigo": "201230805",
+    "asignatura": "GESTIÓN DE PROYECTOS DE TI",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 3
+    }
+  },
+  {
+    "numero": 130,
+    "codigo": "2010901",
+    "asignatura": "DESARROLLO DE TESIS I",
+    "planes": {
+      "2018": 1,
+      "2023": null,
+      "2015": null
+    }
+  },
+  {
+    "numero": 131,
+    "codigo": "20118091",
+    "asignatura": "DESARROLLO DE PROYECTOS DE TESIS I",
+    "planes": {
+      "2018": null,
+      "2023": 153,
+      "2015": null
+    }
+  },
+  {
+    "numero": 132,
+    "codigo": "20118092",
+    "asignatura": "MINERIA DE DATOS",
+    "planes": {
+      "2018": null,
+      "2023": 142,
+      "2015": null
+    }
+  },
+  {
+    "numero": 133,
+    "codigo": "20118093",
+    "asignatura": "TALLER DE APLICACIONES DISTRIBUIDAS",
+    "planes": {
+      "2018": null,
+      "2023": 150,
+      "2015": null
+    }
+  },
+  {
+    "numero": 134,
+    "codigo": "20118094",
+    "asignatura": "INNOVACIÓN, CAMBIO ORGANIZACIONAL Y\nEMPRENDIMIENTO",
+    "planes": {
+      "2018": null,
+      "2023": 137,
+      "2015": null
+    }
+  },
+  {
+    "numero": 135,
+    "codigo": "20118095",
+    "asignatura": "ARQUITECTURA EMPRESARIAL",
+    "planes": {
+      "2018": null,
+      "2023": 95,
+      "2015": null
+    }
+  },
+  {
+    "numero": 136,
+    "codigo": "20118096",
+    "asignatura": "ETICA Y DERECHO INFORMÁTICO",
+    "planes": {
+      "2018": null,
+      "2023": 133,
+      "2015": null
+    }
+  },
+  {
+    "numero": 137,
+    "codigo": "20118097",
+    "asignatura": "TENDENCIAS EN SISTEMAS DE INFORMACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": 151,
+      "2015": null
+    }
+  },
+  {
+    "numero": 138,
+    "codigo": "201230903",
+    "asignatura": "MINERÍA DE DATOS",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 5
+    }
+  },
+  {
+    "numero": 139,
+    "codigo": "201230905",
+    "asignatura": "SEGURIDAD DE LA INFORMACIÓN",
+    "planes": {
+      "2018": null,
+      "2023": null,
+      "2015": 25
+    }
+  },
+  {
+    "numero": 140,
+    "codigo": "2011001",
+    "asignatura": "DESARROLLO DE TESIS II",
+    "planes": {
+      "2018": 1,
+      "2023": null,
+      "2015": null
+    }
+  },
+  {
+    "numero": 141,
+    "codigo": "2011002",
+    "asignatura": "INTEGRACIÓN DE SISTEMAS",
+    "planes": {
+      "2018": 1,
+      "2023": null,
+      "2015": null
+    }
+  },
+  {
+    "numero": 142,
+    "codigo": "20118101",
+    "asignatura": "DESARROLLO DE PROYECTOS DE TESIS II",
+    "planes": {
+      "2018": null,
+      "2023": 65,
+      "2015": null
+    }
+  },
+  {
+    "numero": 143,
+    "codigo": "20118102",
+    "asignatura": "PRACTICA PRE PROFESIONAL",
+    "planes": {
+      "2018": null,
+      "2023": 81,
+      "2015": null
+    }
+  },
+  {
+    "numero": 144,
+    "codigo": "20118103",
+    "asignatura": "GESTIÓN DE CONOCIMIENTO",
+    "planes": {
+      "2018": null,
+      "2023": 173,
+      "2015": null
+    }
+  },
+  {
+    "numero": 145,
+    "codigo": "20118104",
+    "asignatura": "PLANEAMIENTO DE RECURSOS EMPRESARIALES",
+    "planes": {
+      "2018": null,
+      "2023": 136,
+      "2015": null
+    }
+  },
+  {
+    "numero": 146,
+    "codigo": "20118105",
+    "asignatura": "GERENCIA INFORMÁTICA",
+    "planes": {
+      "2018": null,
+      "2023": 48,
+      "2015": null
+    }
+  }
+]
