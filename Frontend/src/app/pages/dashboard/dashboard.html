@@ -1,19 +1,22 @@
 <div class="app-shell">
   <aside class="sidebar">
-    <div class="logo">FISI<span>·</span> PLAN</div>
+    <div class="logo">SPA<span>·</span>FISI</div>
     <nav><a class="active" routerLink="/planificaciones">▦ Planificaciones</a></nav>
     <button class="logout" (click)="auth.logout()" routerLink="/login">Cerrar sesión</button>
   </aside>
   <main class="content">
     <p class="crumb">PLANIFICACIÓN ACADÉMICA</p>
-    <h1>Mis planificaciones</h1>
+    <h1>Planificaciones</h1>
     <p class="subtitle">Crea una planificación o abre una existente para continuar el trabajo.</p>
 
     <section class="hero">
       <div>
         <p class="eyebrow">NUEVO PROCESO</p>
         <h2>Empieza la planificación de un periodo académico</h2>
-        <p>Selecciona la Escuela y el periodo, importa la demanda y edita la propuesta cuando lo necesites.</p>
+        <p>
+          Selecciona la Escuela y el periodo, importa la demanda y edita la propuesta cuando lo
+          necesites.
+        </p>
         <a class="primary" routerLink="/planificaciones/nueva">+ Crear planificación</a>
       </div>
     </section>

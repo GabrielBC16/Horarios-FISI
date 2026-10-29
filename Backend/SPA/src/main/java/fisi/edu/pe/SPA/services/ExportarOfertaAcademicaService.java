@@ -25,35 +25,30 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import com.alibaba.excel.write.handler.context.CellWriteHandlerContext;
+import com.alibaba.excel.write.handler.CellWriteHandler;
+import com.alibaba.excel.write.handler.SheetWriteHandler;
+import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
+import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Set;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 @Service
 public class ExportarOfertaAcademicaService {
     private static final Short PLAN_2018 = (short) 2018;
     private static final Short PLAN_2023 = (short) 2023;
-    private static final List<List<String>> PROFESORES_HEAD = List.of(
-            List.of("CICLO PLAN 2018"),
-            List.of("CÓDIGO PLAN 2018"),
-            List.of("CURSO PLAN 2018"),
-            List.of("CICLO PLAN 2023"),
-            List.of("CÓDIGO PLAN 2023"),
-            List.of("CURSO PLAN 2023"),
-            List.of("SECCIÓN"),
-            List.of("PROFESOR"),
-            List.of("HORARIO"),
-            List.of("PLAN 2018"),
-            List.of("PLAN 2023"),
-            List.of("TOTAL"));
-    private static final List<List<String>> SEMANAL_HEAD = List.of(
-            List.of("CICLO"),
-            List.of("DÍA"),
-            List.of("HORA INICIO"),
-            List.of("HORA FIN"),
-            List.of("CURSO"),
-            List.of("SECCIÓN"),
-            List.of("PROFESOR"),
-            List.of("PLAN 2018"),
-            List.of("PLAN 2023"),
-            List.of("TOTAL"));
     private static final List<String> DIAS = List.of(
             "LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO", "DOMINGO");
 
@@ -62,6 +57,10 @@ public class ExportarOfertaAcademicaService {
     private final ConvalidacionRespository convalidacionRepository;
     private final SeccionRepository seccionRepository;
     private final SeccionHorarioRepository horarioRepository;
+
+    private static final int COLS_PROFESORES = 9;
+    private static final int[] ANCHOS_PROFESORES = { 10, 7, 14, 12, 12, 40, 12, 12, 12 };
+    private static final int[] ANCHOS_SEMANAL = { 8, 14, 12, 12, 50, 12, 38, 12, 12, 12 };
 
     public ExportarOfertaAcademicaService(
             PlanificacionRepository planificacionRepository,
@@ -95,10 +94,20 @@ public class ExportarOfertaAcademicaService {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
             var writer = EasyExcel.write(output).build();
-            writer.write(construirFilasProfesores(grupos.values(), horarios),
-                    EasyExcel.writerSheet("Profesores").head(PROFESORES_HEAD).build());
-            writer.write(construirFilasSemanal(grupos.values(), horarios),
-                    EasyExcel.writerSheet("Por Semana").head(SEMANAL_HEAD).build());
+            Hoja profesores = construirHojaProfesores(grupos.values(), horarios);
+            writer.write(profesores.datos,
+                    EasyExcel.writerSheet("Profesores")
+                            .needHead(false)
+                            .useDefaultStyle(false)
+                            .registerWriteHandler(new FormatoHoja(profesores))
+                            .build());
+            Hoja semanal = construirHojaSemanal(grupos.values(), horarios);
+            writer.write(semanal.datos,
+                    EasyExcel.writerSheet("Por Semana")
+                            .needHead(false)
+                            .useDefaultStyle(false)
+                            .registerWriteHandler(new FormatoHoja(semanal))
+                            .build());
             writer.finish();
             return output.toByteArray();
         } catch (ExcelGenerateException exception) {
@@ -182,6 +191,119 @@ public class ExportarOfertaAcademicaService {
                         horario -> horario.getSeccion().getId(),
                         LinkedHashMap::new,
                         java.util.stream.Collectors.toList()));
+    }
+
+    private Hoja construirHojaProfesores(
+            Iterable<GrupoCurso> grupos,
+            Map<UUID, List<SeccionHorario>> horarios) {
+        Hoja hoja = new Hoja(ANCHOS_PROFESORES, Set.of(5));
+        for (GrupoCurso grupo : ordenar(grupos)) {
+            if (!grupo.cursos2018.isEmpty()) {
+                encabezadoCurso(hoja, "2018", grupo.codigos2018(), grupo.nombres2018());
+            }
+            if (grupo.curso2023 != null) {
+                encabezadoCurso(hoja, "2023", grupo.codigo2023(), grupo.nombre2023());
+            }
+            hoja.fila(TipoFila.TABLA_HEADER,
+                    "GRUPO", "TIPO", "DÍA", "HORA INICIO", "HORA FIN", "DOCENTE",
+                    "PLAN 2018", "PLAN 2023", "TOTAL");
+
+            List<Seccion> secciones = seccionesOrdenadas(grupo);
+            if (secciones.isEmpty()) {
+                hoja.fila(TipoFila.DETALLE, "", "", "", "", "", "", "", "", "");
+            }
+            int totalCurso = 0;
+            for (Seccion seccion : secciones) {
+                int cupos2018 = valorOZero(seccion.getCuposPlan2018());
+                int cupos2023 = valorOZero(seccion.getCuposPlan2023());
+                totalCurso += cupos2018 + cupos2023;
+                List<SeccionHorario> bloques = horarios.getOrDefault(seccion.getId(), List.of());
+                int n = Math.max(1, bloques.size());
+                int primera = hoja.siguiente();
+                for (int i = 0; i < n; i++) {
+                    SeccionHorario b = bloques.isEmpty() ? null : bloques.get(i);
+                    boolean first = i == 0;
+                    hoja.fila(TipoFila.DETALLE,
+                            first ? seccion.getCodigo() : "",
+                            "",
+                            b == null ? "" : DIAS.get(b.getDia() - 1),
+                            b == null ? "" : b.getHoraInicio().toString(),
+                            b == null ? "" : b.getHoraFin().toString(),
+                            first && seccion.getProfesor() != null ? seccion.getProfesor() : "",
+                            first ? Integer.toString(cupos2018) : "",
+                            first ? Integer.toString(cupos2023) : "",
+                            first ? Integer.toString(cupos2018 + cupos2023) : "");
+                }
+                for (int col : new int[] { 0, 5, 6, 7, 8 }) {
+                    hoja.merge(primera, primera + n - 1, col, col);
+                }
+            }
+            if (!secciones.isEmpty()) {
+                hoja.fila(TipoFila.TOTAL, "", "", "", "", "", "", "", "TOTAL CURSO",
+                        Integer.toString(totalCurso));
+            }
+            hoja.fila(TipoFila.SEPARADOR, "", "", "", "", "", "", "", "", "");
+        }
+        return hoja;
+    }
+
+    private void encabezadoCurso(Hoja hoja, String plan, String codigo, String nombre) {
+        int r = hoja.siguiente();
+        hoja.fila(TipoFila.CURSO_HEADER,
+                "PLAN: " + plan, "", "CÓDIGO: " + codigo, "", "", "CURSO: " + nombre,
+                "CRÉDITOS: ", "", "COD PREREQ: ");
+        hoja.merge(r, r, 0, 1);
+        hoja.merge(r, r, 2, 4);
+        hoja.merge(r, r, 6, 7);
+    }
+
+    private Hoja construirHojaSemanal(
+            Iterable<GrupoCurso> grupos,
+            Map<UUID, List<SeccionHorario>> horarios) {
+        Hoja hoja = new Hoja(ANCHOS_SEMANAL, Set.of(4, 6));
+        hoja.fila(TipoFila.TABLA_HEADER,
+                "CICLO", "DÍA", "HORA INICIO", "HORA FIN", "CURSO", "SECCIÓN", "PROFESOR",
+                "PLAN 2018", "PLAN 2023", "TOTAL");
+        for (GrupoCurso grupo : ordenar(grupos)) {
+            for (Seccion seccion : seccionesOrdenadas(grupo)) {
+                int cupos2018 = valorOZero(seccion.getCuposPlan2018());
+                int cupos2023 = valorOZero(seccion.getCuposPlan2023());
+                String profesor = seccion.getProfesor() == null ? "" : seccion.getProfesor();
+                List<SeccionHorario> bloques = horarios.getOrDefault(seccion.getId(), List.of());
+                if (bloques.isEmpty()) {
+                    hoja.fila(TipoFila.DETALLE,
+                            grupo.ciclo().toString(), "", "", "",
+                            grupo.nombreCurso(), seccion.getCodigo(), profesor,
+                            Integer.toString(cupos2018), Integer.toString(cupos2023),
+                            Integer.toString(cupos2018 + cupos2023));
+                    continue;
+                }
+                for (SeccionHorario b : bloques) {
+                    hoja.fila(TipoFila.DETALLE,
+                            grupo.ciclo().toString(),
+                            DIAS.get(b.getDia() - 1),
+                            b.getHoraInicio().toString(),
+                            b.getHoraFin().toString(),
+                            grupo.nombreCurso(), seccion.getCodigo(), profesor,
+                            Integer.toString(cupos2018), Integer.toString(cupos2023),
+                            Integer.toString(cupos2018 + cupos2023));
+                }
+            }
+        }
+        return hoja;
+    }
+
+    private List<GrupoCurso> ordenar(Iterable<GrupoCurso> grupos) {
+        List<GrupoCurso> ordenados = new ArrayList<>();
+        grupos.forEach(ordenados::add);
+        ordenados.sort(Comparator.comparing(GrupoCurso::ciclo).thenComparing(GrupoCurso::codigoOrden));
+        return ordenados;
+    }
+
+    private List<Seccion> seccionesOrdenadas(GrupoCurso grupo) {
+        return grupo.secciones().stream()
+                .sorted(Comparator.comparing(Seccion::getCodigo, Comparator.nullsLast(String::compareTo)))
+                .toList();
     }
 
     private List<List<String>> construirFilasProfesores(
@@ -382,5 +504,96 @@ public class ExportarOfertaAcademicaService {
             }
             return nombres2018();
         }
+    }
+}
+
+// Clases auxiliares
+final class Hoja {
+    final List<List<String>> datos = new ArrayList<>();
+    final List<TipoFila> tipos = new ArrayList<>();
+    final List<CellRangeAddress> merges = new ArrayList<>();
+    final int[] anchos;
+    final Set<Integer> columnasIzquierda;
+
+    Hoja(int[] anchos, Set<Integer> columnasIzquierda) {
+        this.anchos = anchos;
+        this.columnasIzquierda = columnasIzquierda;
+    }
+
+    void fila(TipoFila tipo, String... valores) {
+        datos.add(new ArrayList<>(Arrays.asList(valores)));
+        tipos.add(tipo);
+    }
+
+    int siguiente() {
+        return datos.size();
+    }
+
+    void merge(int r1, int r2, int c1, int c2) {
+        if (r1 != r2 || c1 != c2) {
+            merges.add(new CellRangeAddress(r1, r2, c1, c2));
+        }
+    }
+}
+
+/** Aplica anchos, combinaciones y estilos según el tipo de fila. */
+final class FormatoHoja implements SheetWriteHandler, CellWriteHandler {
+    private final Hoja hoja;
+    private final Map<String, CellStyle> cache = new HashMap<>();
+
+    FormatoHoja(Hoja hoja) {
+        this.hoja = hoja;
+    }
+
+    @Override
+    public void afterSheetCreate(WriteWorkbookHolder workbookHolder, WriteSheetHolder sheetHolder) {
+        Sheet sheet = sheetHolder.getSheet();
+        for (int i = 0; i < hoja.anchos.length; i++) {
+            sheet.setColumnWidth(i, hoja.anchos[i] * 256);
+        }
+        hoja.merges.forEach(sheet::addMergedRegion);
+    }
+
+    @Override
+    public void afterCellDispose(CellWriteHandlerContext context) {
+        Cell cell = context.getCell();
+        if (cell == null || cell.getRowIndex() >= hoja.tipos.size()) {
+            return;
+        }
+        TipoFila tipo = hoja.tipos.get(cell.getRowIndex());
+        int col = cell.getColumnIndex();
+        if (tipo == TipoFila.SEPARADOR || (tipo == TipoFila.TOTAL && col < 7)) {
+            return;
+        }
+        boolean izquierda = tipo == TipoFila.CURSO_HEADER || hoja.columnasIzquierda.contains(col);
+        cell.setCellStyle(estilo(cell.getSheet().getWorkbook(), tipo, izquierda));
+    }
+
+    private CellStyle estilo(Workbook wb, TipoFila tipo, boolean izquierda) {
+        return cache.computeIfAbsent(tipo + ":" + izquierda, k -> {
+            CellStyle s = wb.createCellStyle();
+            s.setBorderTop(BorderStyle.THIN);
+            s.setBorderBottom(BorderStyle.THIN);
+            s.setBorderLeft(BorderStyle.THIN);
+            s.setBorderRight(BorderStyle.THIN);
+            s.setVerticalAlignment(VerticalAlignment.CENTER);
+            s.setAlignment(izquierda ? HorizontalAlignment.LEFT : HorizontalAlignment.CENTER);
+            s.setWrapText(true);
+            if (tipo != TipoFila.DETALLE) {
+                Font bold = wb.createFont();
+                bold.setBold(true);
+                s.setFont(bold);
+            }
+            if (tipo == TipoFila.CURSO_HEADER) {
+                s.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
+                s.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            } else if (tipo == TipoFila.TABLA_HEADER) {
+                s.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+                s.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            } else if (tipo == TipoFila.TOTAL) {
+                s.setAlignment(HorizontalAlignment.CENTER);
+            }
+            return s;
+        });
     }
 }
