@@ -1,0 +1,72 @@
+
+.planning-list {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #e1e7ef;
+  border-radius: 1rem;
+  background: #fff;
+}
+
+.list-heading,
+.plan-row,
+.plan-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.list-heading {
+  margin-bottom: 1rem;
+}
+
+.list-heading h2,
+.plan-row h3,
+.plan-row p {
+  margin: 0;
+}
+
+.list-heading label {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.list-heading select {
+  min-width: 16rem;
+}
+
+.plans {
+  display: grid;
+}
+
+.plan-row {
+  padding: 1rem 0;
+  border-top: 1px solid #e1e7ef;
+}
+
+.plan-row p,
+.list-message {
+  margin-top: 0.4rem;
+  color: #64748b;
+}
+
+.plan-actions {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 720px) {
+  .list-heading,
+  .plan-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .list-heading select {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .plan-actions {
+    justify-content: flex-start;
+  }
+}

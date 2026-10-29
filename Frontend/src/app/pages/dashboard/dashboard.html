@@ -1,0 +1,72 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="logo">FISI<span>·</span> PLAN</div>
+    <nav><a class="active" routerLink="/planificaciones">▦ Planificaciones</a></nav>
+    <button class="logout" (click)="auth.logout()" routerLink="/login">Cerrar sesión</button>
+  </aside>
+  <main class="content">
+    <p class="crumb">PLANIFICACIÓN ACADÉMICA</p>
+    <h1>Mis planificaciones</h1>
+    <p class="subtitle">Crea una planificación o abre una existente para continuar el trabajo.</p>
+
+    <section class="hero">
+      <div>
+        <p class="eyebrow">NUEVO PROCESO</p>
+        <h2>Empieza la planificación de un periodo académico</h2>
+        <p>Selecciona la Escuela y el periodo, importa la demanda y edita la propuesta cuando lo necesites.</p>
+        <a class="primary" routerLink="/planificaciones/nueva">+ Crear planificación</a>
+      </div>
+    </section>
+
+    <section class="planning-list">
+      <div class="list-heading">
+        <div>
+          <p class="eyebrow">PROCESOS EXISTENTES</p>
+          <h2>Continuar una planificación</h2>
+        </div>
+        <label>
+          Escuela
+          <select
+            [ngModel]="schoolId"
+            (ngModelChange)="loadPlans($event)"
+            [disabled]="loadingSchools()"
+          >
+            <option value="">Selecciona una escuela</option>
+            @for (school of schools(); track school.id) {
+              <option [value]="school.id">{{ school.nombre }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+      } @else if (loadingPlans()) {
+        <p class="list-message">Cargando planificaciones...</p>
+      } @else if (schoolId && plans().length === 0) {
+        <p class="list-message">No hay planificaciones para esta escuela todavía.</p>
+      } @else if (!schoolId) {
+        <p class="list-message">Selecciona una escuela para consultar sus planificaciones.</p>
+      } @else {
+        <div class="plans">
+          @for (plan of plans(); track plan.id) {
+            <article class="plan-row">
+              <div>
+                <h3>{{ plan.periodoAcademico }}</h3>
+                <p>{{ plan.escuela }} · {{ plan.estado.replaceAll('_', ' ') }}</p>
+              </div>
+              <div class="plan-actions">
+                <a class="outline" [routerLink]="['/planificaciones', plan.id, 'importar']">
+                  Importar PDF
+                </a>
+                <a class="primary" [routerLink]="['/planificaciones', plan.id, 'programacion']">
+                  Abrir programación
+                </a>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  </main>
+</div>

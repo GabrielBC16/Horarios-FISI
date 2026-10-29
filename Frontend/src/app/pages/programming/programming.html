@@ -1,0 +1,83 @@
+<main class="page programming">
+  <div class="page-head">
+    <div>
+      <a routerLink="/planificaciones" class="back">← Planificaciones</a>
+      <p class="eyebrow">PASO 4 DE 4 · PROGRAMACIÓN EDITABLE</p>
+      <h1>Secciones, cupos y horarios</h1>
+      <p>Edita lo que necesites. Todos los cambios permanecen locales hasta presionar <b>Guardar cambios</b>.</p>
+    </div>
+    <button class="outline" (click)="goExport()">Exportar Excel</button>
+  </div>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @for (oferta of ofertas(); track oferta.id) {
+    <article class="offer">
+      <header>
+        <div>
+          <span class="cycle">Ciclo {{ oferta.curso.ciclo }}</span>
+          <h2>{{ oferta.curso.codigo }} · {{ oferta.curso.nombre }}</h2>
+        </div>
+        <label>
+          Situación
+          <select [(ngModel)]="oferta.situacion" (change)="dirty()">
+            <option>OFERTAR</option>
+            <option>NO_OFERTAR</option>
+            <option>PENDIENTE</option>
+          </select>
+        </label>
+      </header>
+      <div class="offer-fields">
+        <label>Demanda<input type="number" [(ngModel)]="oferta.estudiantesEstimados" (input)="dirty()"></label>
+        <label>Capacidad base<input type="number" [(ngModel)]="oferta.capacidadAplicada" (input)="dirty()"></label>
+        <label>Secciones propuestas<input type="number" [(ngModel)]="oferta.seccionesPropuestas" (input)="dirty()"></label>
+        <label>Motivo<textarea [(ngModel)]="oferta.motivoDecision" (input)="dirty()"></textarea></label>
+      </div>
+      <div class="sections-head">
+        <h3>Secciones</h3>
+        <button class="outline small" (click)="addSection(oferta)">+ Añadir sección</button>
+      </div>
+      @for (section of oferta.secciones; track section.id || $index) {
+        <section class="section">
+          <div class="section-fields">
+            <label>Código<input [(ngModel)]="section.codigo" (input)="dirty()"></label>
+            <label>Profesor<input [(ngModel)]="section.profesor" placeholder="Por asignar" (input)="dirty()"></label>
+            <label>Capacidad<input type="number" [(ngModel)]="section.capacidad" (input)="dirty()"></label>
+            <label>Cupos 2018<input type="number" [(ngModel)]="section.cuposPlan2018" (input)="dirty()"></label>
+            <label>Cupos 2023<input type="number" [(ngModel)]="section.cuposPlan2023" (input)="dirty()"></label>
+            <button class="danger" (click)="removeSection(oferta, $index)">Retirar</button>
+          </div>
+          <div class="schedules">
+            <b>Horarios</b>
+            @for (h of section.horarios; track h.id || $index) {
+              <div class="schedule-row">
+                <select [(ngModel)]="h.dia" (change)="dirty()">
+                  <option [ngValue]="1">Lunes</option>
+                  <option [ngValue]="2">Martes</option>
+                  <option [ngValue]="3">Miércoles</option>
+                  <option [ngValue]="4">Jueves</option>
+                  <option [ngValue]="5">Viernes</option>
+                  <option [ngValue]="6">Sábado</option>
+                </select>
+                <input type="time" [(ngModel)]="h.horaInicio" (change)="dirty()">
+                <span>–</span>
+                <input type="time" [(ngModel)]="h.horaFin" (change)="dirty()">
+                <button class="text-danger" (click)="removeSchedule(section, $index)">Eliminar</button>
+              </div>
+            }
+            <button class="link" (click)="addSchedule(section)">+ Agregar horario</button>
+          </div>
+        </section>
+      }
+    </article>
+  }
+  @if (ofertas().length === 0 && !error()) {
+    <p>Cargando programación…</p>
+  }
+  <div class="savebar">
+    <span [class.unsaved]="!saved()">{{ saved() ? 'Sin cambios pendientes' : 'Tienes cambios sin guardar' }}</span>
+    <button class="primary" [disabled]="saved() || saving()" (click)="save()">
+      {{ saving() ? 'Guardando...' : 'Guardar cambios' }}
+    </button>
+  </div>
+</main>

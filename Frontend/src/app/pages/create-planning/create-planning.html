@@ -1,0 +1,29 @@
+<main class="page">
+  <a routerLink="/planificaciones" class="back">← Planificaciones</a>
+  <section class="form-card">
+    <p class="eyebrow">PASO 1 DE 4</p>
+    <h1>Crear planificación</h1>
+    <p>Define la Escuela y el periodo académico. Luego podrás importar el PDF de demanda.</p>
+    <label
+      >Escuela profesional<select [(ngModel)]="schoolId" name="school">
+        <option value="">Selecciona una Escuela</option>
+        @for (s of schools(); track s.id) {
+          <option [value]="s.id">{{ s.nombre }}</option>
+        }
+      </select></label
+    ><label
+      >Periodo académico<select [(ngModel)]="periodId" name="period">
+        <option value="">Selecciona un periodo</option>
+        @for (p of periods(); track p.id) {
+          <option [value]="p.id">{{ p.codigo }}</option>
+        }
+      </select></label
+    >
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+    <button class="primary" [disabled]="!schoolId || !periodId || loading()" (click)="create()">
+      {{ loading() ? 'Creando...' : 'Crear e importar demanda →' }}
+    </button>
+  </section>
+</main>
