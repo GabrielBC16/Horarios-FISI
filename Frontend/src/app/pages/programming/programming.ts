@@ -39,8 +39,12 @@ export class ProgrammingPage {
 
   load() {
     this.api.programacion(this.planId).subscribe({
-      next: (response) => this.ofertas.set(this.shareSections(response)),
-      error: (error: unknown) =>
+      next: (response) =>
+        this.ofertas.set(
+          this.shareSections(response).sort(
+            (a, b) => a.curso.ciclo - b.curso.ciclo || a.curso.codigo.localeCompare(b.curso.codigo),
+          ),
+        ),      error: (error: unknown) =>
         this.error.set(this.errorMessage(error, 'No se pudo cargar la programación.')),
     });
   }
@@ -251,3 +255,5 @@ export class ProgrammingPage {
     return fallback;
   }
 }
+
+
