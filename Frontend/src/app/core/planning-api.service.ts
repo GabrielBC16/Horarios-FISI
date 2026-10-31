@@ -13,7 +13,7 @@ import {
 @Injectable({ providedIn: 'root' })
 export class PlanningApiService {
   private readonly http = inject(HttpClient);
-  private readonly base = 'http://localhost:8080/api';
+  private readonly base = 'http://192.168.30.194:8080/api';
 
   escuelas() {
     console.log('Consultando escuelas a la API...');
