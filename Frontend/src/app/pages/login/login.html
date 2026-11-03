@@ -9,19 +9,17 @@
     <form class="login-card" (ngSubmit)="submit()">
       <p class="eyebrow dark">ACCESO</p>
       <h2>Iniciar sesión</h2>
+      <label>Correo<input name="correo" [(ngModel)]="correo" type="text" required /></label>
+      <label>Clave<input name="clave" [(ngModel)]="clave" type="password" required /></label>
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+      }
+      <button class="primary full" [disabled]="loading()">
+        {{ loading() ? 'Ingresando...' : 'Ingresar →' }}
+      </button>
       <p class="muted">
-        (Mientras no haya autenticación institucional, usa el UUID de un usuario existente.)
+        ¿Aún no tienes usuario? <a routerLink="/crear-usuario">Crear usuario</a>
       </p>
-      <label>Correo<input name="email" [(ngModel)]="email" type="email" required /></label
-      ><label
-        >UUID de usuario<input
-          name="userId"
-          [(ngModel)]="userId"
-          placeholder="UUID registrado en la base de datos"
-          required /></label
-      ><label
-        >Contraseña<input name="password" [(ngModel)]="password" type="password" required /></label
-      ><button class="primary full">Ingresar →</button>
     </form>
   </section>
 </main>

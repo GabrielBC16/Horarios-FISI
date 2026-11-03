@@ -69,3 +69,23 @@ export interface Oferta {
   version: number;
   secciones: Seccion[];
 }
+
+export interface Usuario {
+  usuarioId: string;
+  nombre: string;
+  identificador: string;
+  rol: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  clave: string;
+}
+
+export interface CrearUsuarioRequest {
+  email: string;
+  clave: string;
+  nombre: string;
+  area: string;
+  rol: string;
+}

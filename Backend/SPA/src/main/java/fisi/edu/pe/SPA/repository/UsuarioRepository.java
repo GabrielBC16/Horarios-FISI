@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
     Optional<Usuario> findByIdentificador(String identificador);
 
+    Optional<Usuario> findByCorreo(String correo);
+
     List<Usuario> findByArea_Id(UUID areaId);
 
     // boolean existsByUsernameAndPassword(String username, String password);

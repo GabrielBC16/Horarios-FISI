@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginPage } from './pages/login/login';
+import { CreateUserPage } from './pages/create-user/create-user';
 import { DashboardPage } from './pages/dashboard/dashboard';
 import { CreatePlanningPage } from './pages/create-planning/create-planning';
 import { ImportDemandPage } from './pages/import-demand/import-demand';
@@ -8,6 +9,7 @@ import { ProgrammingPage } from './pages/programming/programming';
 import { ExportPage } from './pages/export/export';
 export const routes: Routes = [
   { path: 'login', component: LoginPage },
+  { path: 'crear-usuario', component: CreateUserPage },
   { path: 'planificaciones', component: DashboardPage },
   { path: 'planificaciones/nueva', component: CreatePlanningPage },
   { path: 'planificaciones/:id/importar', component: ImportDemandPage },
