@@ -92,14 +92,16 @@ public class ValidarOfertaAcademicaService {
         log.info("Preparando la respuesta para {} ofertas", ofertas.size());
         long inicioMapeo = System.nanoTime();
         List<OfertaCursoConSeccionesDto> respuesta = ofertas.stream()
-                .map(oferta -> toOfertaDto(
-                        oferta,
-                        seccionesPorGrupo.getOrDefault(
-                                grupoDeCurso(
-                                        oferta.getCurso().getId(),
-                                        oferta.getCurso().getPlan().getAnio(),
-                                        curso2018A2023),
-                                List.of())))
+                .map(oferta -> {
+                    UUID grupoCursoId = grupoDeCurso(
+                            oferta.getCurso().getId(),
+                            oferta.getCurso().getPlan().getAnio(),
+                            curso2018A2023);
+                    return toOfertaDto(
+                            oferta,
+                            grupoCursoId,
+                            seccionesPorGrupo.getOrDefault(grupoCursoId, List.of()));
+                })
                 .toList();
         log.info("Respuesta preparada con {} ofertas en {} ms",
                 respuesta.size(), elapsedMillis(inicioMapeo));
@@ -108,6 +110,7 @@ public class ValidarOfertaAcademicaService {
 
     private OfertaCursoConSeccionesDto toOfertaDto(
             OfertaCurso oferta,
+            UUID grupoCursoId,
             List<OfertaCursoConSeccionesDto.SeccionDto> secciones) {
         var curso = oferta.getCurso();
         log.debug("Mapeando oferta {} del curso {} con {} secciones",
@@ -115,7 +118,11 @@ public class ValidarOfertaAcademicaService {
         return new OfertaCursoConSeccionesDto(
                 oferta.getId(),
                 new OfertaCursoConSeccionesDto.CursoDto(
-                        curso.getId(), curso.getCodigo(), curso.getNombre(), curso.getCiclo()),
+                        curso.getId(),
+                        curso.getCodigo(),
+                        curso.getNombre(),
+                        curso.getCiclo(),
+                        curso.getPlan().getAnio()),
                 oferta.getEstudiantesEstimados(),
                 oferta.getCapacidadAplicada(),
                 (int) secciones.stream()
@@ -125,7 +132,8 @@ public class ValidarOfertaAcademicaService {
                 oferta.getSituacion(),
                 oferta.getMotivoDecision(),
                 oferta.getVersionRegistro(),
-                secciones);
+                secciones,
+                grupoCursoId);
     }
 
     private OfertaCursoConSeccionesDto.SeccionDto toSeccionDto(

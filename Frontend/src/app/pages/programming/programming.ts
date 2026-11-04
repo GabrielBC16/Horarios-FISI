@@ -1,10 +1,19 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../core/auth.service';
 import { PlanningApiService } from '../../core/planning-api.service';
 import { Horario, Oferta, Seccion } from '../../models/api.model';
+
+interface GrupoOferta {
+  id: string;
+  curso: Oferta['curso'];
+  ofertaPrincipal: Oferta;
+  ofertas: Oferta[];
+  secciones: Seccion[];
+  planesLabel: string;
+}
 
 @Component({
   selector: 'app-programming',
@@ -26,6 +35,61 @@ export class ProgrammingPage {
   readonly error = signal('');
   readonly saved = signal(true);
   readonly saving = signal(false);
+  readonly searchQuery = signal('');
+  readonly expandedCycles = signal<Set<number>>(new Set());
+  readonly grupos = computed(() => {
+    const ofertasPorGrupo = new Map<string, Oferta[]>();
+    for (const oferta of this.ofertas()) {
+      const grupoId = oferta.grupoCursoId || oferta.curso.id;
+      const ofertas = ofertasPorGrupo.get(grupoId) ?? [];
+      ofertas.push(oferta);
+      ofertasPorGrupo.set(grupoId, ofertas);
+    }
+
+    return Array.from(ofertasPorGrupo, ([id, ofertas]): GrupoOferta => {
+      ofertas.sort((a, b) => b.curso.planAnio - a.curso.planAnio);
+      const ofertaPrincipal = ofertas.find((oferta) => oferta.curso.id === id) ?? ofertas[0];
+      const seccionesPorId = new Map<string, Seccion>();
+      const seccionesLocales = new Set<Seccion>();
+      for (const oferta of ofertas) {
+        for (const seccion of oferta.secciones) {
+          if (seccion.id) {
+            seccionesPorId.set(seccion.id, seccion);
+          } else {
+            seccionesLocales.add(seccion);
+          }
+        }
+      }
+
+      return {
+        id,
+        curso: ofertaPrincipal.curso,
+        ofertaPrincipal,
+        ofertas,
+        secciones: [...seccionesPorId.values(), ...seccionesLocales],
+        planesLabel: [...new Set(ofertas.map((oferta) => oferta.curso.planAnio))]
+          .sort((a, b) => b - a)
+          .join(' y '),
+      };
+    });
+  });
+  readonly ciclos = computed(() => {
+    const query = this.normalize(this.searchQuery());
+    const matchingGroups = this.grupos().filter(
+      (group) =>
+        !query ||
+        group.ofertas.some((oferta) =>
+          this.normalize(`${oferta.curso.codigo} ${oferta.curso.nombre}`).includes(query),
+        ),
+    );
+    return Array.from({ length: 10 }, (_, index) => {
+      const ciclo = index + 1;
+      return { ciclo, grupos: matchingGroups.filter((group) => group.curso.ciclo === ciclo) };
+    });
+  });
+  readonly cursosVisibles = computed(() =>
+    this.ciclos().reduce((total, ciclo) => total + ciclo.grupos.length, 0),
+  );
   private removed: Seccion[] = [];
   private removedSchedules: { sectionId: string; item: Horario }[] = [];
 
@@ -49,15 +113,31 @@ export class ProgrammingPage {
     });
   }
 
+  setSearch(query: string) {
+    this.searchQuery.set(query);
+  }
+
+  toggleCycle(cycle: number) {
+    this.expandedCycles.update((current) => {
+      const next = new Set(current);
+      next.has(cycle) ? next.delete(cycle) : next.add(cycle);
+      return next;
+    });
+  }
+
+  isCycleOpen(cycle: { ciclo: number; grupos: GrupoOferta[] }) {
+    return this.searchQuery().trim() ? cycle.grupos.length > 0 : this.expandedCycles().has(cycle.ciclo);
+  }
+
   dirty() {
     this.saved.set(false);
   }
 
-  addSection(oferta: Oferta) {
+  addSection(grupo: GrupoOferta) {
     const section: Seccion = {
-      codigo: `S${String(oferta.secciones.length + 1).padStart(2, '0')}`,
+      codigo: `S${String(grupo.secciones.length + 1).padStart(2, '0')}`,
       profesor: null,
-      capacidad: oferta.capacidadAplicada,
+      capacidad: grupo.ofertaPrincipal.capacidadAplicada,
       cuposPlan2018: 0,
       cuposPlan2023: 0,
       estado: 'ACTIVA',
@@ -66,14 +146,16 @@ export class ProgrammingPage {
     };
     this.ofertas.update((offers) =>
       offers.map((item) =>
-        item.id === oferta.id ? { ...item, secciones: [...item.secciones, section] } : item,
+        item.id === grupo.ofertaPrincipal.id
+          ? { ...item, secciones: [...item.secciones, section] }
+          : item,
       ),
     );
     this.dirty();
   }
 
-  removeSection(oferta: Oferta, index: number) {
-    const section = oferta.secciones[index];
+  removeSection(grupo: GrupoOferta, index: number) {
+    const section = grupo.secciones[index];
     if (!section) {
       return;
     }
@@ -191,6 +273,14 @@ export class ProgrammingPage {
     this.router.navigate(['/planificaciones', this.planId, 'exportar']);
   }
 
+  private normalize(value: string) {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+  }
+
   private shareSections(offers: Oferta[]): Oferta[] {
     const sectionsById = new Map<string, Seccion>();
     return offers.map((offer) => ({
@@ -255,5 +345,3 @@ export class ProgrammingPage {
     return fallback;
   }
 }
-
-

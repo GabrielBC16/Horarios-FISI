@@ -12,7 +12,7 @@ La clase abstracta `Area` usa herencia `SINGLE_TABLE`, con la columna discrimina
 
 Cada usuario tiene un área y un rol de texto, cuyos permisos administra el backend. Un plan curricular y una planificación pertenecen específicamente a una `Escuela`. No se crean entidades de permisos.
 
-Las relaciones `ManyToOne` son diferidas y no tienen cascadas de borrado. Se navega de hijo a padre; los hijos se consultan mediante sus repositorios. Las entidades no deben exponerse directamente como respuestas JSON: los futuros controladores deben usar DTO para evitar consultas involuntarias de relaciones diferidas.
+Las relaciones `ManyToOne` son diferidas y no tienen cascadas de borrado. Se navega de hijo a padre; los hijos se consultan mediante sus repositorios. El borrado completo de una planificación elimina explícitamente, en una sola transacción y en orden de dependencias, sus horarios, secciones, ofertas, cambios de auditoría, intercambios e importaciones antes de eliminar la planificación. No se ponen las claves foráneas a `NULL`. Las entidades no deben exponerse directamente como respuestas JSON: los controladores deben usar DTO para evitar consultas involuntarias de relaciones diferidas.
 
 `curso.capacidad_seccion_default` se mapea como `capacidadSeccionDefault`. Una oferta conserva la capacidad aplicada. Una sección registra profesor, capacidad editable, cupos de planes 2018 y 2023, y estado; sus bloques están en `SeccionHorario`, con día ISO de 1 a 7 y horas `LocalTime`. Las secciones nuevas usan `app.oferta.capacidad-seccion-default` (35 por defecto); la capacidad de una sección ya creada se conserva en los recálculos. Los cupos por plan para grupos convalidados se asignan proporcionalmente a la demanda total, sin exceder la capacidad por sección.
 
@@ -39,7 +39,7 @@ select set_config('app.motivo', :motivo, true);
 
 Estos valores deben proceder de la identidad y operación verificadas por el backend. Un `repository.save` aislado sobre planificación, oferta, sección u horario fallará si no se ha establecido ese contexto. En operaciones sobre la programación hay que bloquear primero la fila de planificación de acuerdo con el protocolo descrito en la guía del DDL.
 
-`CambioPlanificacion` lleva `@Immutable` y solo expone getters. Su repositorio es un `JpaRepository` como los demás, pero debe utilizarse únicamente para lectura: los registros los crean los triggers y la base rechaza su modificación/eliminación. La asignación del usuario importador no debe confundirse con la autoría de las correcciones externas.
+`CambioPlanificacion` lleva `@Immutable` y solo expone getters. En las operaciones ordinarias su repositorio se utiliza únicamente para lectura: los registros los crean los triggers. La eliminación de una planificación completa es una operación destructiva especial que también elimina sus registros de auditoría. La asignación del usuario importador no debe confundirse con la autoría de las correcciones externas.
 
 Los servicios futuros deben verificar los estados del flujo, las condiciones para aprobar, los datos obligatorios de cada etapa y los conflictos de importación. La capa de entidades/repositorios no implementa esas reglas ni autenticación.
 

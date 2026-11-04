@@ -234,8 +234,7 @@ public class CalcularOfertaAcademicaService {
         Map<Integer, Seccion> seccionesPorNumero = new LinkedHashMap<>();
         existentes.stream()
                 .sorted(Comparator
-                        .comparing((Seccion seccion) ->
-                                !seccion.getOfertaCurso().getId().equals(ofertaAncla.getId()))
+                        .comparing((Seccion seccion) -> !seccion.getOfertaCurso().getId().equals(ofertaAncla.getId()))
                         .thenComparingInt(seccion -> numeroDeSeccion(seccion.getCodigo())))
                 .forEach(seccion -> {
                     int numero = numeroDeSeccion(seccion.getCodigo());
@@ -277,7 +276,7 @@ public class CalcularOfertaAcademicaService {
             int cupos2023 = ocupacion - cupos2018;
 
             seccion.setOfertaCurso(ofertaAncla);
-            seccion.setCodigo("S%02d".formatted(indice + 1));
+            seccion.setCodigo("G-%d".formatted(indice + 1));
             seccion.setEstado(EstadoSeccion.ACTIVA);
             seccion.setCuposPlan2018(cupos2018);
             seccion.setCuposPlan2023(cupos2023);
@@ -325,7 +324,7 @@ public class CalcularOfertaAcademicaService {
 
     private int numeroDeSeccion(String codigo) {
         try {
-            return Integer.parseInt(codigo.replaceFirst("^S", ""));
+            return Integer.parseInt(codigo.replaceFirst("^(?:S|G-)", ""));
         } catch (NumberFormatException exception) {
             return Integer.MAX_VALUE;
         }

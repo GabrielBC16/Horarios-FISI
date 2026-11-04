@@ -62,6 +62,10 @@ class ValidarOfertaAcademicaServiceTests {
         var resultado = service.getOfertaAcademicaByPlanificacionId(planificacionId);
 
         assertEquals(2, resultado.size());
+        assertEquals(curso2023.getId(), resultado.get(0).grupoCursoId());
+        assertEquals(curso2023.getId(), resultado.get(1).grupoCursoId());
+        assertEquals((short) 2018, resultado.get(0).curso().planAnio());
+        assertEquals((short) 2023, resultado.get(1).curso().planAnio());
         assertEquals(List.of("S01"), resultado.get(0).secciones().stream()
                 .map(seccion -> seccion.codigo()).toList());
         assertEquals(List.of("S01"), resultado.get(1).secciones().stream()

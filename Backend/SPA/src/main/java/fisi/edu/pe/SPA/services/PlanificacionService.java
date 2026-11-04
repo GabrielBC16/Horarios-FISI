@@ -6,9 +6,15 @@ import fisi.edu.pe.SPA.domain.entity.Planificacion;
 import fisi.edu.pe.SPA.domain.entity.Usuario;
 import fisi.edu.pe.SPA.dto.planificacion.CrearPlanificacionRequest;
 import fisi.edu.pe.SPA.dto.planificacion.PlanificacionDto;
+import fisi.edu.pe.SPA.repository.CambioPlanificacionRepository;
 import fisi.edu.pe.SPA.repository.EscuelaRepository;
+import fisi.edu.pe.SPA.repository.ImportacionRepository;
+import fisi.edu.pe.SPA.repository.IntercambioExcelRepository;
+import fisi.edu.pe.SPA.repository.OfertaCursoRepository;
 import fisi.edu.pe.SPA.repository.PeriodoAcademicoRepository;
 import fisi.edu.pe.SPA.repository.PlanificacionRepository;
+import fisi.edu.pe.SPA.repository.SeccionHorarioRepository;
+import fisi.edu.pe.SPA.repository.SeccionRepository;
 import fisi.edu.pe.SPA.repository.UsuarioRepository;
 import java.util.List;
 import java.util.UUID;
@@ -25,18 +31,36 @@ public class PlanificacionService {
     private final PeriodoAcademicoRepository periodoRepository;
     private final UsuarioRepository usuarioRepository;
     private final AuditoriaPlanificacionService auditoriaService;
+    private final SeccionHorarioRepository seccionHorarioRepository;
+    private final SeccionRepository seccionRepository;
+    private final OfertaCursoRepository ofertaCursoRepository;
+    private final CambioPlanificacionRepository cambioPlanificacionRepository;
+    private final IntercambioExcelRepository intercambioExcelRepository;
+    private final ImportacionRepository importacionRepository;
 
     public PlanificacionService(
             PlanificacionRepository planificacionRepository,
             EscuelaRepository escuelaRepository,
             PeriodoAcademicoRepository periodoRepository,
             UsuarioRepository usuarioRepository,
-            AuditoriaPlanificacionService auditoriaService) {
+            AuditoriaPlanificacionService auditoriaService,
+            SeccionHorarioRepository seccionHorarioRepository,
+            SeccionRepository seccionRepository,
+            OfertaCursoRepository ofertaCursoRepository,
+            CambioPlanificacionRepository cambioPlanificacionRepository,
+            IntercambioExcelRepository intercambioExcelRepository,
+            ImportacionRepository importacionRepository) {
         this.planificacionRepository = planificacionRepository;
         this.escuelaRepository = escuelaRepository;
         this.periodoRepository = periodoRepository;
         this.usuarioRepository = usuarioRepository;
         this.auditoriaService = auditoriaService;
+        this.seccionHorarioRepository = seccionHorarioRepository;
+        this.seccionRepository = seccionRepository;
+        this.ofertaCursoRepository = ofertaCursoRepository;
+        this.cambioPlanificacionRepository = cambioPlanificacionRepository;
+        this.intercambioExcelRepository = intercambioExcelRepository;
+        this.importacionRepository = importacionRepository;
     }
 
     @Transactional
@@ -82,6 +106,27 @@ public class PlanificacionService {
         return planificacionRepository.findByAreaEscuela_IdOrderByPeriodoAcademico_CodigoDesc(escuelaId).stream()
                 .map(this::convertir)
                 .toList();
+    }
+
+    @Transactional
+    public void eliminar(UUID id, UUID usuarioId) {
+        if (id == null || usuarioId == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Debe indicar el id de la planificación y el usuario.");
+        }
+
+        Planificacion planificacion = planificacionRepository.findByIdForUpdate(id)
+                .orElseThrow(() -> noEncontrado("Planificación"));
+        Usuario usuario = usuarioActivo(usuarioId);
+        auditoriaService.establecerContexto(usuario, "Eliminación de planificación académica");
+
+        seccionHorarioRepository.deleteAllByPlanificacionId(id);
+        seccionRepository.deleteAllByPlanificacionId(id);
+        ofertaCursoRepository.deleteAllByPlanificacionId(id);
+        cambioPlanificacionRepository.deleteAllByPlanificacionId(id);
+        intercambioExcelRepository.deleteAllByPlanificacionId(id);
+        importacionRepository.deleteAllByPlanificacionId(id);
+        planificacionRepository.delete(planificacion);
     }
 
     private Usuario usuarioActivo(UUID usuarioId) {

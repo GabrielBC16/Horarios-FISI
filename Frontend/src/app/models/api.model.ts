@@ -59,7 +59,8 @@ export interface Seccion {
 }
 export interface Oferta {
   id: string;
-  curso: { id: string; codigo: string; nombre: string; ciclo: number };
+  curso: { id: string; codigo: string; nombre: string; ciclo: number; planAnio: number };
+  grupoCursoId: string;
   estudiantesEstimados: number;
   capacidadAplicada: number;
   seccionesCalculadas: number;

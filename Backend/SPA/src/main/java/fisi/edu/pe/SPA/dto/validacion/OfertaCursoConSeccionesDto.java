@@ -16,9 +16,10 @@ public record OfertaCursoConSeccionesDto(
         SituacionOferta situacion,
         String motivoDecision,
         Long version,
-        List<SeccionDto> secciones) {
+        List<SeccionDto> secciones,
+        UUID grupoCursoId) {
 
-    public record CursoDto(UUID id, String codigo, String nombre, Short ciclo) {}
+    public record CursoDto(UUID id, String codigo, String nombre, Short ciclo, Short planAnio) {}
 
     public record SeccionDto(
             UUID id,
