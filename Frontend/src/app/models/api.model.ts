@@ -59,7 +59,8 @@ export interface Seccion {
 }
 export interface Oferta {
   id: string;
-  curso: { id: string; codigo: string; nombre: string; ciclo: number };
+  curso: { id: string; codigo: string; nombre: string; ciclo: number; planAnio: number };
+  grupoCursoId: string;
   estudiantesEstimados: number;
   capacidadAplicada: number;
   seccionesCalculadas: number;
@@ -68,4 +69,24 @@ export interface Oferta {
   motivoDecision: string | null;
   version: number;
   secciones: Seccion[];
+}
+
+export interface Usuario {
+  usuarioId: string;
+  nombre: string;
+  identificador: string;
+  rol: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  clave: string;
+}
+
+export interface CrearUsuarioRequest {
+  email: string;
+  clave: string;
+  nombre: string;
+  area: string;
+  rol: string;
 }

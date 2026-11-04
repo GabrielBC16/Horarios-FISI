@@ -11,67 +11,98 @@
   @if (error()) {
     <p class="error">{{ error() }}</p>
   }
-  @for (oferta of ofertas(); track oferta.id) {
-    <article class="offer">
-      <header>
-        <div>
-          <span class="cycle">Ciclo {{ oferta.curso.ciclo }}</span>
-          <h2>{{ oferta.curso.codigo }} · {{ oferta.curso.nombre }}</h2>
-        </div>
-        <label>
-          Situación
-          <select [(ngModel)]="oferta.situacion" (change)="dirty()">
-            <option>OFERTAR</option>
-            <option>NO_OFERTAR</option>
-            <option>PENDIENTE</option>
-          </select>
-        </label>
-      </header>
-      <div class="offer-fields">
-        <label>Demanda<input type="number" [(ngModel)]="oferta.estudiantesEstimados" (input)="dirty()"></label>
-        <label>Capacidad base<input type="number" [(ngModel)]="oferta.capacidadAplicada" (input)="dirty()"></label>
-        <label>Secciones propuestas<input type="number" [(ngModel)]="oferta.seccionesPropuestas" (input)="dirty()"></label>
-        <label>Motivo<textarea [(ngModel)]="oferta.motivoDecision" (input)="dirty()"></textarea></label>
-      </div>
-      <div class="sections-head">
-        <h3>Secciones</h3>
-        <button class="outline small" (click)="addSection(oferta)">+ Añadir sección</button>
-      </div>
-      @for (section of oferta.secciones; track section.id || $index) {
-        <section class="section">
-          <div class="section-fields">
-            <label>Código<input [(ngModel)]="section.codigo" (input)="dirty()"></label>
-            <label>Profesor<input [(ngModel)]="section.profesor" placeholder="Por asignar" (input)="dirty()"></label>
-            <label>Capacidad<input type="number" [(ngModel)]="section.capacidad" (input)="dirty()"></label>
-            <label>Cupos 2018<input type="number" [(ngModel)]="section.cuposPlan2018" (input)="dirty()"></label>
-            <label>Cupos 2023<input type="number" [(ngModel)]="section.cuposPlan2023" (input)="dirty()"></label>
-            <button class="danger" (click)="removeSection(oferta, $index)">Retirar</button>
-          </div>
-          <div class="schedules">
-            <b>Horarios</b>
-            @for (h of section.horarios; track h.id || $index) {
-              <div class="schedule-row">
-                <select [(ngModel)]="h.dia" (change)="dirty()">
-                  <option [ngValue]="1">Lunes</option>
-                  <option [ngValue]="2">Martes</option>
-                  <option [ngValue]="3">Miércoles</option>
-                  <option [ngValue]="4">Jueves</option>
-                  <option [ngValue]="5">Viernes</option>
-                  <option [ngValue]="6">Sábado</option>
-                </select>
-                <input type="time" [(ngModel)]="h.horaInicio" (change)="dirty()">
-                <span>–</span>
-                <input type="time" [(ngModel)]="h.horaFin" (change)="dirty()">
-                <button class="text-danger" (click)="removeSchedule(section, $index)">Eliminar</button>
-              </div>
+  <section class="course-filters">
+    <label class="course-search">
+      <span>⌕</span>
+      <input
+        type="search"
+        placeholder="Buscar por nombre o código de curso"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="setSearch($event)"
+      >
+    </label>
+    <p>{{ cursosVisibles() }} cursos (incluyendo grupos convalidados) organizados en 10 ciclos.</p>
+  </section>
+
+  <section class="cycle-list" aria-label="Cursos agrupados por ciclo">
+    @for (group of ciclos(); track group.ciclo) {
+      <article class="cycle-panel" [class.open]="isCycleOpen(group)" [class.no-results]="group.grupos.length === 0">
+        <button class="cycle-toggle" (click)="toggleCycle(group.ciclo)" [attr.aria-expanded]="isCycleOpen(group)">
+          <span class="cycle-number">{{ group.ciclo }}</span>
+          <span class="cycle-title">{{ group.ciclo === 1 ? 'Primer' : group.ciclo === 2 ? 'Segundo' : group.ciclo === 3 ? 'Tercer' : group.ciclo === 4 ? 'Cuarto' : group.ciclo === 5 ? 'Quinto' : group.ciclo === 6 ? 'Sexto' : group.ciclo === 7 ? 'Séptimo' : group.ciclo === 8 ? 'Octavo' : group.ciclo === 9 ? 'Noveno' : 'Décimo' }} ciclo</span>
+          <span class="offer-count">{{ group.grupos.length }} {{ group.grupos.length === 1 ? 'curso' : 'cursos' }}</span>
+          <span class="chevron">⌄</span>
+        </button>
+        @if (isCycleOpen(group)) {
+          <div class="cycle-content">
+            @if (group.grupos.length === 0) {
+              <p class="empty-cycle">No se encontraron cursos para este ciclo.</p>
             }
-            <button class="link" (click)="addSchedule(section)">+ Agregar horario</button>
+            @for (curso of group.grupos; track curso.id) {
+              <article class="offer">
+                <header>
+                  <div>
+                    <span class="cycle">Ciclo {{ curso.curso.ciclo }}</span>
+                    <h2>{{ curso.curso.codigo }} · {{ curso.curso.nombre }}</h2>
+                  </div>
+                </header>
+                @if (curso.ofertas.length > 1) {
+                  <p class="equivalence-note">
+                    Grupo convalidado · {{ curso.ofertas.length }} cursos de los planes
+                    {{ curso.planesLabel }}
+                  </p>
+                }
+                @for (oferta of curso.ofertas; track oferta.id) {
+                  <section class="offer-plan">
+                    <h3>Plan {{ oferta.curso.planAnio }} · {{ oferta.curso.codigo }} · {{ oferta.curso.nombre }}</h3>
+                    <div class="offer-fields">
+                      <label>Demanda<input type="number" [(ngModel)]="oferta.estudiantesEstimados" (input)="dirty()"></label>
+                      <label>Capacidad base<input type="number" [(ngModel)]="oferta.capacidadAplicada" (input)="dirty()"></label>
+                      <label>Secciones propuestas<input type="number" [(ngModel)]="oferta.seccionesPropuestas" (input)="dirty()"></label>
+                      <label>Motivo<textarea [(ngModel)]="oferta.motivoDecision" (input)="dirty()"></textarea></label>
+                      <label>
+                        Situación
+                        <select [(ngModel)]="oferta.situacion" (change)="dirty()">
+                          <option>OFERTAR</option><option>NO_OFERTAR</option><option>PENDIENTE</option>
+                        </select>
+                      </label>
+                    </div>
+                  </section>
+                }
+                <div class="sections-head">
+                  <h3>Secciones compartidas</h3>
+                  <button class="outline small" (click)="addSection(curso)">+ Añadir sección</button>
+                </div>
+                @for (section of curso.secciones; track section.id || $index) {
+                  <section class="section">
+                    <div class="section-fields">
+                      <label>Código<input [(ngModel)]="section.codigo" (input)="dirty()"></label>
+                      <label>Profesor<input [(ngModel)]="section.profesor" placeholder="Por asignar" (input)="dirty()"></label>
+                      <label>Capacidad<input type="number" [(ngModel)]="section.capacidad" (input)="dirty()"></label>
+                      <label>Cupos 2018<input type="number" [(ngModel)]="section.cuposPlan2018" (input)="dirty()"></label>
+                      <label>Cupos 2023<input type="number" [(ngModel)]="section.cuposPlan2023" (input)="dirty()"></label>
+                      <button class="danger" (click)="removeSection(curso, $index)">Retirar</button>
+                    </div>
+                    <div class="schedules">
+                      <b>Horarios</b>
+                      @for (h of section.horarios; track h.id || $index) {
+                        <div class="schedule-row">
+                          <select [(ngModel)]="h.dia" (change)="dirty()"><option [ngValue]="1">Lunes</option><option [ngValue]="2">Martes</option><option [ngValue]="3">Miércoles</option><option [ngValue]="4">Jueves</option><option [ngValue]="5">Viernes</option><option [ngValue]="6">Sábado</option></select>
+                          <input type="time" [(ngModel)]="h.horaInicio" (change)="dirty()"><span>–</span><input type="time" [(ngModel)]="h.horaFin" (change)="dirty()">
+                          <button class="text-danger" (click)="removeSchedule(section, $index)">Eliminar</button>
+                        </div>
+                      }
+                      <button class="link" (click)="addSchedule(section)">+ Agregar horario</button>
+                    </div>
+                  </section>
+                }
+              </article>
+            }
           </div>
-        </section>
-      }
-    </article>
-  }
-  @if (ofertas().length === 0 && !error()) {
+        }
+      </article>
+    }
+  </section>  @if (ofertas().length === 0 && !error()) {
     <p>Cargando programación…</p>
   }
   <div class="savebar">

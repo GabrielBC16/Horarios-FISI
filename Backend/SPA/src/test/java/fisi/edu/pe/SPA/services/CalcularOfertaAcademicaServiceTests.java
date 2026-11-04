@@ -32,6 +32,98 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 class CalcularOfertaAcademicaServiceTests {
     @Test
+    void allocatesConvalidatedDemandAcrossFiveSectionsAnchoredToPlan2023Offer() {
+        ImportacionRepository importacionRepository = org.mockito.Mockito.mock(ImportacionRepository.class);
+        CursoRepository cursoRepository = org.mockito.Mockito.mock(CursoRepository.class);
+        ConvalidacionRespository convalidacionRepository = org.mockito.Mockito.mock(ConvalidacionRespository.class);
+        OfertaCursoRepository ofertaCursoRepository = org.mockito.Mockito.mock(OfertaCursoRepository.class);
+        SeccionRepository seccionRepository = org.mockito.Mockito.mock(SeccionRepository.class);
+        AuditoriaPlanificacionService auditoriaService =
+                org.mockito.Mockito.mock(AuditoriaPlanificacionService.class);
+        CalcularOfertaAcademicaService service = new CalcularOfertaAcademicaService(
+                new ObjectMapper(),
+                importacionRepository,
+                cursoRepository,
+                convalidacionRepository,
+                ofertaCursoRepository,
+                seccionRepository,
+                auditoriaService);
+
+        UUID planificacionId = UUID.randomUUID();
+        UUID importacionId = UUID.randomUUID();
+        UUID curso2018Id = UUID.randomUUID();
+        UUID curso2023Id = UUID.randomUUID();
+        Planificacion planificacion = new Planificacion();
+        asignarId(planificacion, planificacionId);
+        Importacion importacion = new Importacion();
+        asignarId(importacion, importacionId);
+        importacion.setPlanificacion(planificacion);
+        importacion.setEstado(EstadoImportacion.VALIDADA);
+        importacion.setDetalleValidacion(Map.of("filas", List.of(
+                new FilaImportacionDto(1, "SW2018", "Gestión de riesgo de software", "2018", 70,
+                        curso2018Id, true, null),
+                new FilaImportacionDto(2, "SW2023", "Gestión de riesgo de software", "2023", 105,
+                        curso2023Id, true, null))));
+
+        Escuela escuela = new Escuela();
+        Curso curso2018 = curso(escuela, (short) 2018, "SW2018", "Gestión de riesgo de software", curso2018Id);
+        Curso curso2023 = curso(escuela, (short) 2023, "SW2023", "Gestión de riesgo de software", curso2023Id);
+        Convalidacion convalidacion = new Convalidacion();
+        convalidacion.setCursoConvalidado2018(curso2018);
+        convalidacion.setCurso2023(curso2023);
+
+        when(importacionRepository.findById(importacionId)).thenReturn(Optional.of(importacion));
+        when(cursoRepository.findById(curso2018Id)).thenReturn(Optional.of(curso2018));
+        when(cursoRepository.findById(curso2023Id)).thenReturn(Optional.of(curso2023));
+        when(convalidacionRepository.findAll()).thenReturn(List.of(convalidacion));
+        when(ofertaCursoRepository.findByPlanificacion_IdAndCurso_Id(planificacionId, curso2018Id))
+                .thenReturn(Optional.empty());
+        when(ofertaCursoRepository.findByPlanificacion_IdAndCurso_Id(planificacionId, curso2023Id))
+                .thenReturn(Optional.empty());
+        when(seccionRepository.findByOfertaCurso_IdIn(any())).thenReturn(List.of());
+
+        List<OfertaCurso> ofertas = new ArrayList<>();
+        doAnswer(invocation -> {
+            OfertaCurso oferta = invocation.getArgument(0);
+            if (oferta.getId() == null) {
+                asignarId(oferta, UUID.randomUUID());
+            }
+            if (!ofertas.contains(oferta)) {
+                ofertas.add(oferta);
+            }
+            return oferta;
+        }).when(ofertaCursoRepository).save(any(OfertaCurso.class));
+        when(ofertaCursoRepository.findByPlanificacion_Id(planificacionId)).thenAnswer(
+                invocation -> List.copyOf(ofertas));
+
+        List<Seccion> secciones = new ArrayList<>();
+        doAnswer(invocation -> {
+            Seccion seccion = invocation.getArgument(0);
+            if (seccion.getId() == null) {
+                asignarId(seccion, UUID.randomUUID());
+            }
+            secciones.add(seccion);
+            return seccion;
+        }).when(seccionRepository).save(any(Seccion.class));
+
+        var resultado = service.procesarImportacion(importacionId);
+        UUID ofertaAnclaId = ofertas.stream()
+                .filter(oferta -> oferta.getCurso().getId().equals(curso2023Id))
+                .findFirst()
+                .orElseThrow()
+                .getId();
+
+        assertEquals(5, resultado.seccionesPropuestas());
+        assertEquals(5, secciones.size());
+        assertTrue(secciones.stream().allMatch(seccion ->
+                seccion.getOfertaCurso().getId().equals(ofertaAnclaId)));
+        assertTrue(secciones.stream().allMatch(seccion ->
+                seccion.getCuposPlan2018() == 14 && seccion.getCuposPlan2023() == 21));
+        assertEquals(70, secciones.stream().mapToInt(Seccion::getCuposPlan2018).sum());
+        assertEquals(105, secciones.stream().mapToInt(Seccion::getCuposPlan2023).sum());
+    }
+
+    @Test
     void combinesConvalidatedDemandAndAllocatesProportionalSectionQuotas() {
         ImportacionRepository importacionRepository = org.mockito.Mockito.mock(ImportacionRepository.class);
         CursoRepository cursoRepository = org.mockito.Mockito.mock(CursoRepository.class);

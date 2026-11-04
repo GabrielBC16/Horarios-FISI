@@ -8,5 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AreaRepository extends JpaRepository<Area, UUID> {
     Optional<Area> findByCodigo(String codigo);
+
     List<Area> findByActivoTrue();
+
+    Optional<Area> findByNombre(String nombre);
 }
