@@ -5,7 +5,7 @@ import { CrearUsuarioRequest, LoginRequest, Usuario } from '../models/api.model'
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly base = 'http://localhost:8080/api/auth';
+  private readonly base = 'http://192.168.30.194:8080/api/auth';
   private readonly http = inject(HttpClient);
   readonly user = signal(localStorage.getItem('horarios_user') || '');
   readonly userId = signal(localStorage.getItem('horarios_user_id') || '');
