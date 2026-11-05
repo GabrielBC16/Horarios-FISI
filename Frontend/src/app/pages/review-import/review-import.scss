@@ -1,1 +1,34 @@
 
+.confirmation-hint {
+  margin: 1.25rem 0 0;
+  color: #64748b;
+}
+
+.confirm-import-action {
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+  z-index: 20;
+  padding: 0.75rem;
+  border: 1px solid #d9e5ec;
+  border-radius: 0.9rem;
+  background: rgb(255 255 255 / 94%);
+  box-shadow: 0 12px 30px rgb(15 23 42 / 18%);
+  backdrop-filter: blur(8px);
+}
+
+.confirm-import-action .primary {
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .confirm-import-action {
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+  }
+
+  .confirm-import-action .primary {
+    width: 100%;
+  }
+}

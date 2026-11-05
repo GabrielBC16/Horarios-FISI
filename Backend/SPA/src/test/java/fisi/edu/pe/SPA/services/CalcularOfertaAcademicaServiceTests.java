@@ -21,6 +21,7 @@ import fisi.edu.pe.SPA.repository.ConvalidacionRespository;
 import fisi.edu.pe.SPA.repository.CursoRepository;
 import fisi.edu.pe.SPA.repository.ImportacionRepository;
 import fisi.edu.pe.SPA.repository.OfertaCursoRepository;
+import fisi.edu.pe.SPA.repository.SeccionHorarioRepository;
 import fisi.edu.pe.SPA.repository.SeccionRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,8 @@ class CalcularOfertaAcademicaServiceTests {
         ConvalidacionRespository convalidacionRepository = org.mockito.Mockito.mock(ConvalidacionRespository.class);
         OfertaCursoRepository ofertaCursoRepository = org.mockito.Mockito.mock(OfertaCursoRepository.class);
         SeccionRepository seccionRepository = org.mockito.Mockito.mock(SeccionRepository.class);
+        SeccionHorarioRepository seccionHorarioRepository =
+                org.mockito.Mockito.mock(SeccionHorarioRepository.class);
         AuditoriaPlanificacionService auditoriaService =
                 org.mockito.Mockito.mock(AuditoriaPlanificacionService.class);
         CalcularOfertaAcademicaService service = new CalcularOfertaAcademicaService(
@@ -47,6 +50,7 @@ class CalcularOfertaAcademicaServiceTests {
                 convalidacionRepository,
                 ofertaCursoRepository,
                 seccionRepository,
+                seccionHorarioRepository,
                 auditoriaService);
 
         UUID planificacionId = UUID.randomUUID();
@@ -130,6 +134,8 @@ class CalcularOfertaAcademicaServiceTests {
         ConvalidacionRespository convalidacionRepository = org.mockito.Mockito.mock(ConvalidacionRespository.class);
         OfertaCursoRepository ofertaCursoRepository = org.mockito.Mockito.mock(OfertaCursoRepository.class);
         SeccionRepository seccionRepository = org.mockito.Mockito.mock(SeccionRepository.class);
+        SeccionHorarioRepository seccionHorarioRepository =
+                org.mockito.Mockito.mock(SeccionHorarioRepository.class);
         AuditoriaPlanificacionService auditoriaService =
                 org.mockito.Mockito.mock(AuditoriaPlanificacionService.class);
 
@@ -140,6 +146,7 @@ class CalcularOfertaAcademicaServiceTests {
                 convalidacionRepository,
                 ofertaCursoRepository,
                 seccionRepository,
+                seccionHorarioRepository,
                 auditoriaService);
 
         UUID planificacionId = UUID.randomUUID();
@@ -218,6 +225,73 @@ class CalcularOfertaAcademicaServiceTests {
         assertEquals(EstadoImportacion.APLICADA, importacion.getEstado());
     }
 
+    @Test
+    void excludesCycleOneElectivesAndDeletesTheirExistingOffersAndSchedules() {
+        ImportacionRepository importacionRepository = org.mockito.Mockito.mock(ImportacionRepository.class);
+        CursoRepository cursoRepository = org.mockito.Mockito.mock(CursoRepository.class);
+        ConvalidacionRespository convalidacionRepository = org.mockito.Mockito.mock(ConvalidacionRespository.class);
+        OfertaCursoRepository ofertaCursoRepository = org.mockito.Mockito.mock(OfertaCursoRepository.class);
+        SeccionRepository seccionRepository = org.mockito.Mockito.mock(SeccionRepository.class);
+        SeccionHorarioRepository seccionHorarioRepository =
+                org.mockito.Mockito.mock(SeccionHorarioRepository.class);
+        AuditoriaPlanificacionService auditoriaService =
+                org.mockito.Mockito.mock(AuditoriaPlanificacionService.class);
+        CalcularOfertaAcademicaService service = new CalcularOfertaAcademicaService(
+                new ObjectMapper(),
+                importacionRepository,
+                cursoRepository,
+                convalidacionRepository,
+                ofertaCursoRepository,
+                seccionRepository,
+                seccionHorarioRepository,
+                auditoriaService);
+
+        UUID planificacionId = UUID.randomUUID();
+        UUID importacionId = UUID.randomUUID();
+        UUID curso2018Id = UUID.randomUUID();
+        UUID curso2023Id = UUID.randomUUID();
+        UUID oferta2018Id = UUID.randomUUID();
+        UUID oferta2023Id = UUID.randomUUID();
+        Planificacion planificacion = new Planificacion();
+        asignarId(planificacion, planificacionId);
+        Importacion importacion = new Importacion();
+        asignarId(importacion, importacionId);
+        importacion.setPlanificacion(planificacion);
+        importacion.setEstado(EstadoImportacion.VALIDADA);
+        importacion.setDetalleValidacion(Map.of("filas", List.of(
+                new FilaImportacionDto(1, "INE001", "Electivo", "2018", 20,
+                        curso2018Id, true, null),
+                new FilaImportacionDto(2, "202SW0E03", "Electivo", "2023", 20,
+                        curso2023Id, true, null))));
+
+        Escuela escuela = new Escuela();
+        Curso curso2018 = curso(escuela, (short) 2018, "INE001", "Electivo", curso2018Id);
+        Curso curso2023 = curso(escuela, (short) 2023, "202SW0E03", "Electivo", curso2023Id);
+        OfertaCurso oferta2018 = oferta(planificacion, curso2018, oferta2018Id);
+        OfertaCurso oferta2023 = oferta(planificacion, curso2023, oferta2023Id);
+
+        when(importacionRepository.findById(importacionId)).thenReturn(Optional.of(importacion));
+        when(cursoRepository.findById(curso2018Id)).thenReturn(Optional.of(curso2018));
+        when(cursoRepository.findById(curso2023Id)).thenReturn(Optional.of(curso2023));
+        when(convalidacionRepository.findAll()).thenReturn(List.of());
+        when(ofertaCursoRepository.findByPlanificacion_Id(planificacionId))
+                .thenReturn(List.of(oferta2018, oferta2023))
+                .thenReturn(List.of());
+
+        var resultado = service.procesarImportacion(importacionId);
+
+        assertEquals(0, resultado.ofertasActualizadas());
+        assertEquals(0, resultado.seccionesPropuestas());
+        assertEquals(EstadoImportacion.APLICADA, importacion.getEstado());
+        org.mockito.Mockito.verify(seccionHorarioRepository)
+                .deleteAllByOfertaCursoIds(List.of(oferta2018Id, oferta2023Id));
+        org.mockito.Mockito.verify(seccionRepository)
+                .deleteAllByOfertaCursoIds(List.of(oferta2018Id, oferta2023Id));
+        org.mockito.Mockito.verify(ofertaCursoRepository).deleteAllByIdInBatch(List.of(oferta2018Id, oferta2023Id));
+        org.mockito.Mockito.verify(ofertaCursoRepository, org.mockito.Mockito.never())
+                .save(any(OfertaCurso.class));
+    }
+
     private List<Seccion> capturadas(SeccionRepository repository) {
         var captor = org.mockito.ArgumentCaptor.forClass(Seccion.class);
         org.mockito.Mockito.verify(repository, org.mockito.Mockito.times(2)).save(captor.capture());
@@ -235,9 +309,18 @@ class CalcularOfertaAcademicaServiceTests {
         curso.setPlan(plan);
         curso.setCodigo(codigo);
         curso.setNombre(nombre);
+        curso.setCiclo((short) 1);
         curso.setActivo(true);
         curso.setCapacidadSeccionDefault(35);
         return curso;
+    }
+
+    private OfertaCurso oferta(Planificacion planificacion, Curso curso, UUID id) {
+        OfertaCurso oferta = new OfertaCurso();
+        asignarId(oferta, id);
+        oferta.setPlanificacion(planificacion);
+        oferta.setCurso(curso);
+        return oferta;
     }
 
     private void asignarId(Object entity, UUID id) {

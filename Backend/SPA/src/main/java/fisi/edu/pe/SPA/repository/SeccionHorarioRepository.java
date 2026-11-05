@@ -24,4 +24,15 @@ public interface SeccionHorarioRepository extends JpaRepository<SeccionHorario, 
             )
             """)
     int deleteAllByPlanificacionId(@Param("planificacionId") UUID planificacionId);
+
+    @Modifying
+    @Query("""
+            delete from SeccionHorario horario
+            where horario.seccion.id in (
+                select seccion.id
+                from Seccion seccion
+                where seccion.ofertaCurso.id in :ofertaCursoIds
+            )
+            """)
+    int deleteAllByOfertaCursoIds(@Param("ofertaCursoIds") List<UUID> ofertaCursoIds);
 }

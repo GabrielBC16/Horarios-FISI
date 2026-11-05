@@ -1,21 +1,28 @@
 @if (active) {
   <div class="loading-backdrop" role="alertdialog" aria-modal="true" [attr.aria-label]="title">
     <section class="loading-modal">
-      <div class="spinner" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="spinner" aria-hidden="true"></div>
       <p class="loading-eyebrow">PROCESO EN CURSO</p>
       <h2>{{ title }}</h2>
       <p class="loading-description">{{ description }}</p>
-      <div class="elapsed"><span class="pulse"></span> Tiempo transcurrido: <strong>{{ elapsedLabel() }}</strong></div>
+      <div class="elapsed">
+        <span class="pulse"></span> Tiempo transcurrido: <strong>{{ elapsedLabel() }}</strong>
+      </div>
       <div class="indeterminate-bar"><span></span></div>
       <ol class="progress-stages">
         @for (stage of stages; track stage.label; let index = $index) {
           <li [class.done]="isComplete(index)" [class.current]="isCurrent(index)">
             <i>{{ isComplete(index) ? '✓' : index + 1 }}</i>
-            <div><strong>{{ stage.label }}</strong><small>{{ stage.detail }}</small></div>
+            <div>
+              <strong>{{ stage.label }}</strong
+              ><small>{{ stage.detail }}</small>
+            </div>
           </li>
         }
       </ol>
-      <p class="loading-note">No cierres ni recargues la página mientras esperas la respuesta del servicio.</p>
+      <p class="loading-note">
+        No cierres ni recargues la página mientras esperas la respuesta del servicio.
+      </p>
     </section>
   </div>
 }

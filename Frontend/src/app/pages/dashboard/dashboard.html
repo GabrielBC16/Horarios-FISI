@@ -59,12 +59,24 @@
                 <p>{{ plan.escuela }} · {{ plan.estado.replaceAll('_', ' ') }}</p>
               </div>
               <div class="plan-actions">
-                <a class="outline" [routerLink]="['/planificaciones', plan.id, 'importar']">
+                <a
+                  class="outline"
+                  disabled
+                  [routerLink]="['/planificaciones', plan.id, 'importar']"
+                >
                   Importar PDF
                 </a>
                 <a class="primary" [routerLink]="['/planificaciones', plan.id, 'programacion']">
                   Abrir programación
                 </a>
+                <button
+                  class="danger"
+                  type="button"
+                  [disabled]="deletingPlanId() === plan.id"
+                  (click)="deletePlan(plan)"
+                >
+                  {{ deletingPlanId() === plan.id ? 'Eliminando...' : 'Eliminar' }}
+                </button>
               </div>
             </article>
           }

@@ -37,6 +37,8 @@ La solicitud multipart incluye `archivo` y `usuarioId`. La respuesta incluye `im
 
 `POST /api/importaciones/{importacionId}/confirmar` aplica la vista previa validada mediante el servicio de cálculo de oferta académica. Las filas inválidas no se procesan. Los cursos del plan 2018 con convalidación se agrupan con su curso equivalente del plan 2023; las demandas registradas para varios cursos 2018 con el mismo equivalente se suman también.
 
+En el ciclo 1, la confirmación omite de la oferta los cursos electivos `INE001`, `INE003`, `INE004`, `INE005`, `INE006`, `INE007`, `INE008`, `INE009`, `INE010`, `INE011`, `INE012`, `INE014`, `INE015`, `INE016` e `INE017` del plan 2018, y `202SW0E03`, `202SW0E04`, `202SW0E05`, `202SW0E08` y `202SW0E09` del plan 2023. Si alguno ya tenía oferta en esa planificación, se eliminan físicamente sus horarios, secciones y oferta; el curso del catálogo se conserva.
+
 El número de secciones se calcula con la demanda total del grupo. Cada sección guarda cupos separados para planes 2018 y 2023; la suma no supera su capacidad (la base de datos también valida esta condición). Los cupos se distribuyen proporcionalmente a la demanda de cada plan y en total conservan las cantidades recibidas. La capacidad inicial de una sección nueva es 35, mientras que las secciones existentes conservan su capacidad editable. Una equivalencia utiliza un único juego compartido de secciones, visible al consultar cualquiera de sus ofertas relacionadas.
 
 Luego guarda las ofertas de cada curso y crea o activa las secciones compartidas necesarias. Las secciones sobrantes quedan en estado `RETIRADA`. Las ofertas de cursos no convalidados continúan generando secciones independientes.
@@ -83,7 +85,7 @@ Las horas superpuestas en una sección se rechazan con `409 Conflict`. En grupos
 
 ## Exportación
 
-`GET /api/planificaciones/{planificacionId}/exportaciones/cupos` descarga un `.xlsx` generado con EasyExcel y contiene las hojas `Profesores` y `Por Semana`. En `Profesores` hay un bloque por curso/grupo equivalente con el ciclo, código y nombre de ambos planes, seguido de una tabla de secciones con cupos separados y total, profesor y horario. Los campos de profesor y horario quedan vacíos cuando no se han editado. Las secciones retiradas no se exportan. `Por Semana` lista los horarios de cada sección en filas semanales. Si la planificación no existe, responde `404 Not Found`.
+`GET /api/planificaciones/{planificacionId}/exportaciones/cupos` descarga un `.xlsx` generado con EasyExcel y contiene las hojas `Profesores` y `Por Semana`. Ambas hojas incluyen una fila separadora destacada por ciclo. En `Profesores` hay un bloque por curso/grupo equivalente con el ciclo, código y nombre de ambos planes, seguido de una tabla de secciones con cupos separados y total, profesor y horario. Los campos de profesor y horario quedan vacíos cuando no se han editado. Las secciones retiradas no se exportan. `Por Semana` lista los horarios de cada sección en filas semanales. Si la planificación no existe, responde `404 Not Found`.
 
 El libro se genera dinámicamente con esos datos y nombres de hoja; no reutiliza la plantilla física del Excel de referencia ni replica sus estilos o su cuadrícula visual semanal.
 

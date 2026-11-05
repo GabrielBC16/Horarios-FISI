@@ -1,1 +1,202 @@
-.loading-backdrop{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:rgba(6,30,52,.72);backdrop-filter:blur(4px);animation:fade-in .2s ease}.loading-modal{width:min(510px,100%);max-height:90vh;overflow:auto;border-radius:16px;padding:34px;background:#fff;box-shadow:0 24px 70px rgba(0,22,43,.38);text-align:center}.spinner{width:54px;height:54px;margin:0 auto 18px;position:relative}.spinner:before{content:'';position:absolute;inset:0;border:4px solid #dcecf5;border-top-color:#1676ae;border-radius:50%;animation:spin 1s linear infinite}.spinner span{position:absolute;bottom:-1px;width:6px;height:6px;border-radius:50%;background:#278bc1;animation:blink 1.2s infinite}.spinner span:nth-child(1){left:13px}.spinner span:nth-child(2){left:24px;animation-delay:.2s}.spinner span:nth-child(3){left:35px;animation-delay:.4s}.loading-eyebrow{font-size:10px;font-weight:800;letter-spacing:1.3px;color:#4f87a9;margin:0 0 8px}.loading-modal h2{font-size:24px;color:#193f5c;margin:0 0 9px}.loading-description{color:#607989;line-height:1.55;margin:0 auto 18px;max-width:410px}.elapsed{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:16px;background:#edf7fc;color:#426b83;font-size:12px}.pulse{width:7px;height:7px;border-radius:50%;background:#33ad72;box-shadow:0 0 0 0 rgba(51,173,114,.5);animation:pulse 1.5s infinite}.indeterminate-bar{height:5px;margin:22px 0 20px;border-radius:4px;overflow:hidden;background:#e8eff3}.indeterminate-bar span{display:block;width:35%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#1b78ad,#69c0e6);animation:slide 1.4s ease-in-out infinite}.progress-stages{list-style:none;padding:0;margin:0;text-align:left;display:grid;gap:13px}.progress-stages li{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;color:#899ba7}.progress-stages i{display:grid;place-items:center;width:24px;height:24px;border:1px solid #c9d9e2;border-radius:50%;font-size:11px;font-style:normal}.progress-stages strong,.progress-stages small{display:block}.progress-stages strong{font-size:13px;font-weight:700}.progress-stages small{margin-top:2px;font-size:11px;line-height:1.35}.progress-stages .current{color:#1e6f9f}.progress-stages .current i{border-color:#1e81b9;background:#e8f5fb;color:#1c78ac}.progress-stages .done{color:#43826a}.progress-stages .done i{border-color:#54ad7c;background:#e6f6ed;color:#2d925a}.loading-note{margin:21px 0 0;color:#7d909d;font-size:11px;line-height:1.45}@keyframes spin{to{transform:rotate(360deg)}}@keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(51,173,114,0)}}@keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(340%)}}@keyframes fade-in{from{opacity:0}to{opacity:1}}
+.loading-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(6, 30, 52, 0.72);
+  backdrop-filter: blur(4px);
+  animation: fade-in 0.2s ease;
+}
+.loading-modal {
+  width: min(510px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  border-radius: 16px;
+  padding: 34px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(0, 22, 43, 0.38);
+  text-align: center;
+}
+.spinner {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 18px;
+  position: relative;
+}
+.spinner:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 4px solid #dcecf5;
+  border-top-color: #1676ae;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+/*.spinner span {
+  position: absolute;
+  bottom: -1px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #278bc1;
+  animation: blink 1.2s infinite;
+}*/
+.spinner span:nth-child(1) {
+  left: 13px;
+}
+.spinner span:nth-child(2) {
+  left: 24px;
+  animation-delay: 0.2s;
+}
+.spinner span:nth-child(3) {
+  left: 35px;
+  animation-delay: 0.4s;
+}
+.loading-eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  color: #4f87a9;
+  margin: 0 0 8px;
+}
+.loading-modal h2 {
+  font-size: 24px;
+  color: #193f5c;
+  margin: 0 0 9px;
+}
+.loading-description {
+  color: #607989;
+  line-height: 1.55;
+  margin: 0 auto 18px;
+  max-width: 410px;
+}
+.elapsed {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border-radius: 16px;
+  background: #edf7fc;
+  color: #426b83;
+  font-size: 12px;
+}
+.pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #33ad72;
+  box-shadow: 0 0 0 0 rgba(51, 173, 114, 0.5);
+  animation: pulse 1.5s infinite;
+}
+.indeterminate-bar {
+  height: 5px;
+  margin: 22px 0 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #e8eff3;
+}
+.indeterminate-bar span {
+  display: block;
+  width: 35%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #1b78ad, #69c0e6);
+  animation: slide 1.4s ease-in-out infinite;
+}
+.progress-stages {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  display: grid;
+  gap: 13px;
+}
+.progress-stages li {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 10px;
+  align-items: start;
+  color: #899ba7;
+}
+.progress-stages i {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #c9d9e2;
+  border-radius: 50%;
+  font-size: 11px;
+  font-style: normal;
+}
+.progress-stages strong,
+.progress-stages small {
+  display: block;
+}
+.progress-stages strong {
+  font-size: 13px;
+  font-weight: 700;
+}
+.progress-stages small {
+  margin-top: 2px;
+  font-size: 11px;
+  line-height: 1.35;
+}
+.progress-stages .current {
+  color: #1e6f9f;
+}
+.progress-stages .current i {
+  border-color: #1e81b9;
+  background: #e8f5fb;
+  color: #1c78ac;
+}
+.progress-stages .done {
+  color: #43826a;
+}
+.progress-stages .done i {
+  border-color: #54ad7c;
+  background: #e6f6ed;
+  color: #2d925a;
+}
+.loading-note {
+  margin: 21px 0 0;
+  color: #7d909d;
+  font-size: 11px;
+  line-height: 1.45;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes pulse {
+  70% {
+    box-shadow: 0 0 0 8px rgba(51, 173, 114, 0);
+  }
+}
+@keyframes slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(340%);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

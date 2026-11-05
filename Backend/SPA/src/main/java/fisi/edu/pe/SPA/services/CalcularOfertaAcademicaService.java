@@ -16,6 +16,7 @@ import fisi.edu.pe.SPA.repository.ConvalidacionRespository;
 import fisi.edu.pe.SPA.repository.CursoRepository;
 import fisi.edu.pe.SPA.repository.ImportacionRepository;
 import fisi.edu.pe.SPA.repository.OfertaCursoRepository;
+import fisi.edu.pe.SPA.repository.SeccionHorarioRepository;
 import fisi.edu.pe.SPA.repository.SeccionRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -27,12 +28,19 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
 public class CalcularOfertaAcademicaService {
     private static final Short PLAN_2018 = (short) 2018;
     private static final Short PLAN_2023 = (short) 2023;
+    private static final Set<String> ELECTIVOS_EXCLUIDOS_PLAN_2018 = Set.of(
+            "INE001", "INE003", "INE004", "INE005", "INE006",
+            "INE007", "INE008", "INE009", "INE010", "INE011",
+            "INE012", "INE014", "INE015", "INE016", "INE017");
+    private static final Set<String> ELECTIVOS_EXCLUIDOS_PLAN_2023 = Set.of(
+            "202SW0E03", "202SW0E04", "202SW0E05", "202SW0E08", "202SW0E09");
 
     @Value("${app.oferta.capacidad-seccion-default:35}")
     private int capacidadSeccionDefault = 35;
@@ -42,6 +50,7 @@ public class CalcularOfertaAcademicaService {
     private final ConvalidacionRespository convalidacionRepository;
     private final OfertaCursoRepository ofertaCursoRepository;
     private final SeccionRepository seccionRepository;
+    private final SeccionHorarioRepository seccionHorarioRepository;
     private final AuditoriaPlanificacionService auditoriaService;
 
     public CalcularOfertaAcademicaService(
@@ -51,6 +60,7 @@ public class CalcularOfertaAcademicaService {
             ConvalidacionRespository convalidacionRepository,
             OfertaCursoRepository ofertaCursoRepository,
             SeccionRepository seccionRepository,
+            SeccionHorarioRepository seccionHorarioRepository,
             AuditoriaPlanificacionService auditoriaService) {
         this.objectMapper = objectMapper;
         this.importacionRepository = importacionRepository;
@@ -58,6 +68,7 @@ public class CalcularOfertaAcademicaService {
         this.convalidacionRepository = convalidacionRepository;
         this.ofertaCursoRepository = ofertaCursoRepository;
         this.seccionRepository = seccionRepository;
+        this.seccionHorarioRepository = seccionHorarioRepository;
         this.auditoriaService = auditoriaService;
     }
 
@@ -76,6 +87,7 @@ public class CalcularOfertaAcademicaService {
         auditoriaService.establecerContexto(
                 importacion.getImportadoPor(), "Aplicación de importación de demanda académica");
 
+        eliminarOfertasElectivasExcluidas(importacion.getPlanificacion().getId());
         Map<UUID, Integer> demandas = obtenerDemandas(importacion);
         Map<UUID, OfertaDemanda> ofertasActualizadas = new LinkedHashMap<>();
         for (Map.Entry<UUID, Integer> demanda : demandas.entrySet()) {
@@ -86,6 +98,9 @@ public class CalcularOfertaAcademicaService {
             if (!PLAN_2018.equals(anioPlan) && !PLAN_2023.equals(anioPlan)) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT,
                         "El cálculo de cupos compartidos solo admite cursos de planes 2018 y 2023.");
+            }
+            if (esElectivoExcluido(curso)) {
+                continue;
             }
             OfertaCurso oferta = ofertaCursoRepository
                     .findByPlanificacion_IdAndCurso_Id(importacion.getPlanificacion().getId(), curso.getId())
@@ -136,6 +151,30 @@ public class CalcularOfertaAcademicaService {
 
         importacion.setEstado(EstadoImportacion.APLICADA);
         return new AplicacionImportacionDto(importacion.getId(), ofertasActualizadas.size(), seccionesPropuestas);
+    }
+
+    private void eliminarOfertasElectivasExcluidas(UUID planificacionId) {
+        List<UUID> ofertaIds = ofertaCursoRepository.findByPlanificacion_Id(planificacionId).stream()
+                .filter(oferta -> esElectivoExcluido(oferta.getCurso()))
+                .map(OfertaCurso::getId)
+                .toList();
+        if (ofertaIds.isEmpty()) {
+            return;
+        }
+        seccionHorarioRepository.deleteAllByOfertaCursoIds(ofertaIds);
+        seccionRepository.deleteAllByOfertaCursoIds(ofertaIds);
+        ofertaCursoRepository.deleteAllByIdInBatch(ofertaIds);
+    }
+
+    private boolean esElectivoExcluido(Curso curso) {
+        if (!Short.valueOf((short) 1).equals(curso.getCiclo())) {
+            return false;
+        }
+        if (PLAN_2018.equals(curso.getPlan().getAnio())) {
+            return ELECTIVOS_EXCLUIDOS_PLAN_2018.contains(curso.getCodigo());
+        }
+        return PLAN_2023.equals(curso.getPlan().getAnio())
+                && ELECTIVOS_EXCLUIDOS_PLAN_2023.contains(curso.getCodigo());
     }
 
     private Map<UUID, Integer> obtenerDemandas(Importacion importacion) {

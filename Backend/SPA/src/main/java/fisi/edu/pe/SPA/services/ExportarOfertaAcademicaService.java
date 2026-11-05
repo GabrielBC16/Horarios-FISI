@@ -197,7 +197,12 @@ public class ExportarOfertaAcademicaService {
             Iterable<GrupoCurso> grupos,
             Map<UUID, List<SeccionHorario>> horarios) {
         Hoja hoja = new Hoja(ANCHOS_PROFESORES, Set.of(5));
+        Short cicloActual = null;
         for (GrupoCurso grupo : ordenar(grupos)) {
+            if (!grupo.ciclo().equals(cicloActual)) {
+                encabezadoCiclo(hoja, grupo.ciclo());
+                cicloActual = grupo.ciclo();
+            }
             if (!grupo.cursos2018.isEmpty()) {
                 encabezadoCurso(hoja, "2018", grupo.codigos2018(), grupo.nombres2018());
             }
@@ -264,7 +269,15 @@ public class ExportarOfertaAcademicaService {
         hoja.fila(TipoFila.TABLA_HEADER,
                 "CICLO", "DÍA", "HORA INICIO", "HORA FIN", "CURSO", "SECCIÓN", "PROFESOR",
                 "PLAN 2018", "PLAN 2023", "TOTAL");
+        Short cicloActual = null;
         for (GrupoCurso grupo : ordenar(grupos)) {
+            if (grupo.secciones().isEmpty()) {
+                continue;
+            }
+            if (!grupo.ciclo().equals(cicloActual)) {
+                encabezadoCiclo(hoja, grupo.ciclo());
+                cicloActual = grupo.ciclo();
+            }
             for (Seccion seccion : seccionesOrdenadas(grupo)) {
                 int cupos2018 = valorOZero(seccion.getCuposPlan2018());
                 int cupos2023 = valorOZero(seccion.getCuposPlan2023());
@@ -291,6 +304,18 @@ public class ExportarOfertaAcademicaService {
             }
         }
         return hoja;
+    }
+
+    private void encabezadoCiclo(Hoja hoja, Short ciclo) {
+        String[] valores = new String[hoja.anchos.length];
+        Arrays.fill(valores, "");
+        valores[0] = "CICLO " + ciclo;
+        int fila = hoja.siguiente();
+        hoja.fila(TipoFila.CICLO_HEADER, valores);
+        hoja.merge(fila, fila, 0, valores.length - 1);
+        for (int indice = 0; indice < 2; indice++) {
+            hoja.fila(TipoFila.SEPARADOR, valores);
+        }
     }
 
     private List<GrupoCurso> ordenar(Iterable<GrupoCurso> grupos) {
@@ -565,7 +590,8 @@ final class FormatoHoja implements SheetWriteHandler, CellWriteHandler {
         if (tipo == TipoFila.SEPARADOR || (tipo == TipoFila.TOTAL && col < 7)) {
             return;
         }
-        boolean izquierda = tipo == TipoFila.CURSO_HEADER || hoja.columnasIzquierda.contains(col);
+        boolean izquierda = tipo == TipoFila.CURSO_HEADER
+                || hoja.columnasIzquierda.contains(col);
         cell.setCellStyle(estilo(cell.getSheet().getWorkbook(), tipo, izquierda));
     }
 
@@ -582,9 +608,18 @@ final class FormatoHoja implements SheetWriteHandler, CellWriteHandler {
             if (tipo != TipoFila.DETALLE) {
                 Font bold = wb.createFont();
                 bold.setBold(true);
+                if (tipo == TipoFila.CICLO_HEADER) {
+                    bold.setFontHeightInPoints((short) 14);
+                }
                 s.setFont(bold);
             }
-            if (tipo == TipoFila.CURSO_HEADER) {
+            if (tipo == TipoFila.CICLO_HEADER) {
+                s.setAlignment(HorizontalAlignment.CENTER);
+            }
+            if (tipo == TipoFila.CICLO_HEADER) {
+                s.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+                s.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            } else if (tipo == TipoFila.CURSO_HEADER) {
                 s.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
                 s.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             } else if (tipo == TipoFila.TABLA_HEADER) {

@@ -59,8 +59,8 @@ public class EdicionProgramacionController {
     public SeccionDto retirarSeccion(
             @PathVariable("planificacionId") UUID planificacionId,
             @PathVariable("seccionId") UUID seccionId,
-            @RequestParam UUID usuarioId,
-            @RequestParam Long version) {
+            @RequestParam("usuarioId") UUID usuarioId,
+            @RequestParam("version") Long version) {
         return edicionService.retirarSeccion(planificacionId, seccionId, usuarioId, version);
     }
 
@@ -88,8 +88,7 @@ public class EdicionProgramacionController {
             @PathVariable("planificacionId") UUID planificacionId,
             @PathVariable("seccionId") UUID seccionId,
             @PathVariable("horarioId") UUID horarioId,
-            @RequestParam UUID usuarioId) {
+            @RequestParam("usuarioId") UUID usuarioId) {
         edicionService.eliminarHorario(planificacionId, seccionId, horarioId, usuarioId);
     }
 }
-

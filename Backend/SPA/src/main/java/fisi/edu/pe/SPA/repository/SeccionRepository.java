@@ -20,4 +20,8 @@ public interface SeccionRepository extends JpaRepository<Seccion, UUID> {
     @Modifying
     @Query("delete from Seccion seccion where seccion.ofertaCurso.planificacion.id = :planificacionId")
     int deleteAllByPlanificacionId(@Param("planificacionId") UUID planificacionId);
+
+    @Modifying
+    @Query("delete from Seccion seccion where seccion.ofertaCurso.id in :ofertaCursoIds")
+    int deleteAllByOfertaCursoIds(@Param("ofertaCursoIds") List<UUID> ofertaCursoIds);
 }

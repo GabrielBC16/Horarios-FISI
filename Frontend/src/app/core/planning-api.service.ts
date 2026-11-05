@@ -40,6 +40,13 @@ export class PlanningApiService {
     return this.http.get<Planificacion[]>(`${this.base}/planificaciones/escuela/${escuelaId}`);
   }
 
+  eliminarPlanificacion(id: string, usuarioId: string) {
+    console.log('Eliminando planificacion en la API...');
+    return this.http.delete<void>(`${this.base}/planificaciones/${id}`, {
+      params: { usuarioId },
+    });
+  }
+
   importarDemanda(planificacionId: string, usuarioId: string, pdf: File) {
     console.log('Importando demanda a la API...');
     const f = new FormData();
@@ -71,7 +78,12 @@ export class PlanningApiService {
   }
 
   actualizarOferta(planId: string, oferta: Oferta, usuarioId: string) {
-    console.log('Actualizando oferta en la API...');
+    console.log(
+      'Actualizando oferta en la API... de la oiferta con id: ' +
+        oferta.id +
+        ' y planId: ' +
+        planId,
+    );
     return this.http.put<Oferta>(`${this.base}/planificaciones/${planId}/ofertas/${oferta.id}`, {
       usuarioId,
       version: oferta.version,

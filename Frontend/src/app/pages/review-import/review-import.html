@@ -41,13 +41,15 @@
           }
         </tbody>
       </table>
-      <div class="savebar">
-        <span>Podrás editar secciones, cupos, docentes y horarios después de confirmar.</span
-        ><button class="primary" [disabled]="confirming()" (click)="confirm()">
-          {{ confirming() ? 'Generando...' : 'Confirmar y generar propuesta →' }}
-        </button>
-      </div>
+      <p class="confirmation-hint">
+        Podrás editar secciones, cupos, docentes y horarios después de confirmar.
+      </p>
     </section>
+    <div class="confirm-import-action">
+      <button class="primary" type="button" [disabled]="confirming()" (click)="confirm()">
+        {{ confirming() ? 'Generando propuesta...' : 'Confirmar y generar propuesta →' }}
+      </button>
+    </div>
   } @else {
     <p>Cargando importación…</p>
   }
