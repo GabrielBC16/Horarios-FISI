@@ -10,7 +10,25 @@
       <p class="eyebrow dark">ACCESO</p>
       <h2>Iniciar sesión</h2>
       <label>Correo<input name="correo" [(ngModel)]="correo" type="text" required /></label>
-      <label>Clave<input name="clave" [(ngModel)]="clave" type="password" required /></label>
+      <label>
+        Clave
+        <span class="password-field">
+          <input
+            name="clave"
+            [(ngModel)]="clave"
+            [type]="showPassword() ? 'text' : 'password'"
+            required
+          />
+          <button
+            class="password-toggle"
+            type="button"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword() ? 'Ocultar clave' : 'Mostrar clave'"
+          >
+            {{ showPassword() ? 'Ocultar' : 'Ver' }}
+          </button>
+        </span>
+      </label>
       @if (error()) {
         <p class="error" role="alert">{{ error() }}</p>
       }

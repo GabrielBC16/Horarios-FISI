@@ -1,7 +1,6 @@
 <main class="page programming">
   <div class="page-head">
     <div>
-      <a routerLink="/planificaciones" class="back">← Planificaciones</a>
       <p class="eyebrow">PASO 4 DE 4 · PROGRAMACIÓN EDITABLE</p>
       <h1>Secciones, cupos y horarios</h1>
       <p>
@@ -16,7 +15,14 @@
         }
       </p>
     </div>
-    <button class="outline" (click)="goExport()">Exportar Excel</button>
+    <div class="page-actions">
+      <button class="outline" type="button" [disabled]="saving()" (click)="requestAction('dashboard')">
+        ← Volver a planificaciones
+      </button>
+      <button class="primary" type="button" [disabled]="saving()" (click)="requestAction('export')">
+        Exportar Excel
+      </button>
+    </div>
   </div>
   @if (error()) {
     <p class="error">{{ error() }}</p>
@@ -211,11 +217,43 @@
     <span [class.unsaved]="!saved()">{{
       saved() ? 'Sin cambios pendientes' : 'Tienes cambios sin guardar'
     }}</span>
-    <button class="primary" [disabled]="saved() || saving()" (click)="save()">
-      {{ saving() ? 'Guardando...' : 'Guardar cambios' }}
-    </button>
+    <div class="savebar-actions">
+      <button class="outline savebar-top" type="button" (click)="scrollToTop()">↑ Volver arriba</button>
+      <button class="primary" [disabled]="saved() || saving()" (click)="save()">
+        {{ saving() ? 'Guardando...' : 'Guardar cambios' }}
+      </button>
+    </div>
   </div>
 </main>
+
+@if (pendingAction(); as action) {
+  <div class="unsaved-modal-backdrop" role="presentation">
+    <section
+      class="unsaved-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="unsaved-modal-title"
+    >
+      <p class="eyebrow">CAMBIOS PENDIENTES</p>
+      <h2 id="unsaved-modal-title">Tienes cambios sin guardar</h2>
+      <p>
+        Antes de {{ action === 'export' ? 'exportar el Excel' : 'volver a planificaciones' }},
+        guarda los cambios o descártalos para continuar.
+      </p>
+      <div class="unsaved-modal-actions">
+        <button class="outline" type="button" [disabled]="saving()" (click)="cancelPendingAction()">
+          Cancelar
+        </button>
+        <button class="danger" type="button" [disabled]="saving()" (click)="discardAndContinue()">
+          Descartar y continuar
+        </button>
+        <button class="primary" type="button" [disabled]="saving()" (click)="saveAndContinue()">
+          Guardar y continuar
+        </button>
+      </div>
+    </section>
+  </div>
+}
 
 <app-loading-progress
   [active]="saving()"

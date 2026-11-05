@@ -66,6 +66,32 @@ app-root {
   padding: 11px;
   font: inherit;
 }
+.password-field {
+  position: relative;
+  display: block;
+  margin-top: 6px;
+}
+.password-field input {
+  margin-top: 0 !important;
+  padding-right: 5.3rem !important;
+}
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 5px;
+  padding: 5px 8px;
+  background: #e7f1f6;
+  color: #28658a;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.password-toggle:hover {
+  background: #d6e9f3;
+}
 .primary {
   background: #146fa9;
   color: #fff;

@@ -14,11 +14,16 @@ export class CreateUserPage {
   readonly loading = signal(false);
   readonly error = signal('');
   readonly success = signal(false);
+  readonly showPassword = signal(false);
   email = '';
   clave = '';
   nombre = '';
   area = '';
   rol = '';
+
+  togglePasswordVisibility() {
+    this.showPassword.update((visible) => !visible);
+  }
 
   submit() {
     this.error.set('');

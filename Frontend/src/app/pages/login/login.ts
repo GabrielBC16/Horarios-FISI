@@ -14,8 +14,13 @@ export class LoginPage {
   private readonly router = inject(Router);
   readonly loading = signal(false);
   readonly error = signal('');
+  readonly showPassword = signal(false);
   correo = '';
   clave = '';
+
+  togglePasswordVisibility() {
+    this.showPassword.update((visible) => !visible);
+  }
 
   submit() {
     this.error.set('');

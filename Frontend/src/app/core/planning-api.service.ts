@@ -9,11 +9,12 @@ import {
   Seccion,
   VistaPreviaImportacion,
 } from '../models/api.model';
+import { AppConfigService } from './app-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class PlanningApiService {
   private readonly http = inject(HttpClient);
-  private readonly base = 'http://localhost:8080/api';
+  private readonly base = inject(AppConfigService).apiBaseUrl;
 
   escuelas() {
     console.log('Consultando escuelas a la API...');

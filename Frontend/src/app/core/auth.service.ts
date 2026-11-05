@@ -2,10 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { map } from 'rxjs';
 import { CrearUsuarioRequest, LoginRequest, Usuario } from '../models/api.model';
+import { AppConfigService } from './app-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly base = 'http://localhost:8080/api/auth';
+  private readonly base = `${inject(AppConfigService).apiBaseUrl}/auth`;
   private readonly http = inject(HttpClient);
   readonly user = signal(localStorage.getItem('horarios_user') || '');
   readonly userId = signal(localStorage.getItem('horarios_user_id') || '');

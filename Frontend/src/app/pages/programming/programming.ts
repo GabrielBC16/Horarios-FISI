@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../core/auth.service';
 import { PlanningApiService } from '../../core/planning-api.service';
@@ -19,9 +19,11 @@ interface GrupoOferta {
   planesLabel: string;
 }
 
+type PendingAction = 'export' | 'dashboard';
+
 @Component({
   selector: 'app-programming',
-  imports: [FormsModule, RouterLink, LoadingProgressComponent],
+  imports: [FormsModule, LoadingProgressComponent],
   templateUrl: './programming.html',
   styleUrl: './programming.scss',
 })
@@ -39,6 +41,7 @@ export class ProgrammingPage {
   readonly error = signal('');
   readonly saved = signal(true);
   readonly saving = signal(false);
+  readonly pendingAction = signal<PendingAction | null>(null);
   readonly lastSavedAt = signal<Date | null>(null);
   readonly searchQuery = signal('');
   readonly expandedCycles = signal<Set<number>>(new Set());
@@ -254,11 +257,11 @@ export class ProgrammingPage {
     this.dirty();
   }
 
-  async save() {
+  async save(): Promise<boolean> {
     const usuarioId = this.auth.userId();
     if (!usuarioId) {
       this.error.set('Falta el UUID del usuario activo.');
-      return;
+      return false;
     }
 
     this.saving.set(true);
@@ -330,6 +333,7 @@ export class ProgrammingPage {
       this.saved.set(true);
       this.recordLastSavedAt();
       this.ofertas.update((offers) => [...offers]);
+      return true;
     } catch (error: unknown) {
       this.error.set(
         this.errorMessage(
@@ -337,11 +341,59 @@ export class ProgrammingPage {
           'No se pudieron guardar todos los cambios. Recarga y vuelve a intentarlo.',
         ),
       );
+      return false;
     } finally {
       this.saving.set(false);
     }
   }
-  goExport() {
+
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  requestAction(action: PendingAction) {
+    if (this.saving()) {
+      return;
+    }
+    if (this.saved()) {
+      this.executeAction(action);
+      return;
+    }
+    this.pendingAction.set(action);
+  }
+
+  cancelPendingAction() {
+    if (!this.saving()) {
+      this.pendingAction.set(null);
+    }
+  }
+
+  async saveAndContinue() {
+    const action = this.pendingAction();
+    if (!action) {
+      return;
+    }
+    const saved = await this.save();
+    if (saved) {
+      this.pendingAction.set(null);
+      this.executeAction(action);
+    }
+  }
+
+  discardAndContinue() {
+    const action = this.pendingAction();
+    if (!action || this.saving()) {
+      return;
+    }
+    this.pendingAction.set(null);
+    this.executeAction(action);
+  }
+
+  private executeAction(action: PendingAction) {
+    if (action === 'dashboard') {
+      this.router.navigate(['/planificaciones']);
+      return;
+    }
     this.router.navigate(['/planificaciones', this.planId, 'exportar']);
   }
 

@@ -1,6 +1,8 @@
 package fisi.edu.pe.SPA.controller;
 
 import fisi.edu.pe.SPA.services.ExportarOfertaAcademicaService;
+
+import java.util.Date;
 import java.util.UUID;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -29,10 +31,10 @@ public class ExportarOfertaAcademicaController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(XLSX_MEDIA_TYPE);
         headers.setContentLength(archivo.length);
+        Date now = new Date();
         headers.setContentDisposition(ContentDisposition.attachment()
-                .filename("oferta-academica-" + planificacionId + ".xlsx")
+                .filename("oferta-academica-" + now.toString() + ".xlsx")
                 .build());
         return ResponseEntity.ok().headers(headers).body(archivo);
     }
 }
-

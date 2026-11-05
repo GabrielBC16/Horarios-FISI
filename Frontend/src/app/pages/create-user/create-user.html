@@ -14,7 +14,25 @@
         <a class="primary full" routerLink="/login">Volver a iniciar sesión</a>
       } @else {
         <label>Correo<input name="email" [(ngModel)]="email" type="text" required /></label>
-        <label>Clave<input name="clave" [(ngModel)]="clave" type="password" required /></label>
+        <label>
+          Clave
+          <span class="password-field">
+            <input
+              name="clave"
+              [(ngModel)]="clave"
+              [type]="showPassword() ? 'text' : 'password'"
+              required
+            />
+            <button
+              class="password-toggle"
+              type="button"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="showPassword() ? 'Ocultar clave' : 'Mostrar clave'"
+            >
+              {{ showPassword() ? 'Ocultar' : 'Ver' }}
+            </button>
+          </span>
+        </label>
         <label>Nombre completo<input name="nombre" [(ngModel)]="nombre" type="text" required /></label>
         <label>Área<input name="area" [(ngModel)]="area" type="text" required /></label>
         <label>Rol<input name="rol" [(ngModel)]="rol" type="text" required /></label>
